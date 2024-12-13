@@ -1,0 +1,26 @@
+"Not every pet is right for every person,
+ and not every home is right for every pet. 
+ If your pet had Tinder, would it choose you? 
+ Let Smart Pet Adoption do the job."
+
+Name: Smart Pet Adoption
+
+Description: This application will help shelter staff find appropriate homes 
+for their animals by taking into account the character of the animals, 
+the preferences of pet seekers, and the pets they already own
+
+
+Use cases:
+            SignUp
+            Login
+            isAuthorized Middleware
+            listPets
+            addPet
+            deletePet
+            updatePet
+            adminUserProfile
+            recomendPet:Use AI to match pet seeker preferences with the character of 
+                    available animals to generate a recommendation list
+
+
+
