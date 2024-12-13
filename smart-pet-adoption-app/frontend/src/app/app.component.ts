@@ -1,12 +1,29 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { initial_state, StateService } from './state.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  imports: [RouterOutlet, RouterLink],
+  template: `
+    <h1>{{title}}!</h1>
+    @if(!state_service.isLoggedIn()){
+      <a [routerLink]="['','signin']">Signin</a>
+      <a [routerLink]="['','signup']">Signup</a>
+    }@else {
+      <button (click)="signout()">signout</button>
+    }
+    <router-outlet />
+  `,
+  styles: [`a{margin-right: 10px}`],
 })
 export class AppComponent {
-  title = 'frontend';
+  title = 'Smart Pet Adoption App';
+  state_service = inject(StateService);
+  #router = inject(Router);
+
+  signout() {
+    this.state_service.$state.set(initial_state);
+    this.#router.navigate(['', 'signin']);
+  }
 }

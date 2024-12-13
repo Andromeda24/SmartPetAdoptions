@@ -1,10 +1,35 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
-
-import { routes } from './app.routes';
-import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { ApplicationConfig, inject, provideAppInitializer, provideZoneChangeDetection } from '@angular/core';
+import { provideRouter, Routes } from '@angular/router';
+import { addTokenInterceptor } from './add-token.interceptor';
+import { SigninComponent } from './users/signin.component';
+import { StateService } from './state.service';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
+function initialize() {
+  const state_service = inject(StateService);
+  const state = localStorage.getItem('SPA_APP_STATE');
+  if (state) {
+    state_service.$state.set(JSON.parse(state));
+  }
+}
+
 export const appConfig: ApplicationConfig = {
-  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), provideClientHydration(withEventReplay()), provideAnimationsAsync()]
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideHttpClient(withInterceptors([addTokenInterceptor])),
+    provideAppInitializer(initialize),
+    provideRouter([
+      { path: '', redirectTo: 'signin', pathMatch: 'full' },
+      { path: 'signin', component: SigninComponent },
+      { path: 'signup', loadComponent: () => import('./users/signup.component').then(c => c.SignupComponent) },
+      {
+        path: 'pets', loadChildren: () => import('./pets/pets.routes').then(r => r.pets_routes)    
+      },
+      {
+        path: 'pets/:id',
+        loadComponent: () => import('./pets/detail.component').then(c => c.PetDetailComponent),
+      }
+    ]), provideAnimationsAsync()
+  ]
 };

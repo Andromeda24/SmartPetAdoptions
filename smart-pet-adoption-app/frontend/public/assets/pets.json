@@ -1,0 +1,49 @@
+{
+  "success": true,
+  "data": [
+    {
+      "_id": "1",
+      "name": "Bella",
+      "kind": "Dog",
+      "breed": "Labrador",
+      "age": 3,
+      "gender": "Female",
+      "description": "Friendly and energetic",
+      "image_path": "assets/images/pets/bella.png",
+      "sterilized": true
+    },
+    {
+      "_id": "2",
+      "name": "Max",
+      "kind": "Cat",
+      "breed": "Siamese",
+      "age": 2,
+      "gender": "Male",
+      "description": "Loves cuddles",
+      "image_path": "assets/images/pets/max.png",
+      "sterilized": false
+    },
+    {
+      "_id": "3",
+      "name": "Charlie",
+      "kind": "Bird",
+      "breed": "Parrot",
+      "age": 1,
+      "gender": "Male",
+      "description": "Talkative and social",
+      "image_path": "assets/images/pets/charlie.png",
+      "sterilized": false
+    },
+    {
+      "_id": "4",
+      "name": "Luna",
+      "kind": "Rabbit",
+      "breed": "Angora",
+      "age": 2,
+      "gender": "Female",
+      "description": "Loves to hop around and chew on carrots",
+      "image_path": "assets/images/pets/luna.png",
+      "sterilized": true
+    }
+  ]
+}
