@@ -28,21 +28,19 @@ import { Role } from './user.type';
       <label for="file">Profile Picture :</label>
       <input type="file" [formControl]="form.controls.file" (change)="pickup_file($event)"/>     
       <label for="role">Role :</label> 
-
       <select id="role" [formControl]="form.controls.role">
       <option *ngFor="let role of roleOptions" [value]="role">{{ role }}</option>
       </select>
-      <button [disabled]="form.invalid">Sign up</button>
+      <button [disabled]="form.invalid">Create Account</button>
     </form>
 
   `,
-  styles:[`
-     
+  styles:[`     
       .signup-container {        
         display: grid; 
         grid-template-columns: 150px 1fr; 
         gap: 10px 20px;
-        width: 440px;
+        width: 50%;
         margin: 20px auto;
         padding: 20px 30px 20px 20px;
         background-color: #fff;
@@ -70,7 +68,6 @@ import { Role } from './user.type';
           font-weight: bold;
           color: #333;
         }
-
  
         label {
           text-align: right;
@@ -79,16 +76,26 @@ import { Role } from './user.type';
         }
 
 
-        input, select {
-          width: 100%; 
+        input {
+          width: 50%; 
           padding: 8px;
           font-size: 14px;
           border-radius: 4px;
           border: 1px solid #ccc;
         }
 
+        select {
+          width: 52%; 
+          padding: 8px;
+          font-size: 14px;
+          border-radius: 4px;
+          border: 1px solid #ccc;
+        }
+        
+
         input[type="file"] {
           padding: 2px; 
+          width: 51.4%; 
         }
 
         input[type='checkbox'] {
@@ -99,13 +106,15 @@ import { Role } from './user.type';
         
         button {
         grid-column: 2; 
+        width: 30%; 
         padding: 10px;
-        background-color: #007BFF;
+        background-color: #2669a0;
         color: white;
         border: none;
         border-radius: 5px;
+        align-items : center;
         cursor: pointer;
-        font-size: 16px;
+        font-size: 16px;        
       }
 
       button[disabled] {

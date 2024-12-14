@@ -9,7 +9,7 @@
       "age": 3,
       "gender": "Female",
       "description": "Friendly and energetic",
-      "image_path": "assets/images/pets/bella.png",
+      "image_path": "assets/images/pets/bella.jpg",
       "sterilized": true
     },
     {
@@ -20,7 +20,7 @@
       "age": 2,
       "gender": "Male",
       "description": "Loves cuddles",
-      "image_path": "assets/images/pets/max.png",
+      "image_path": "assets/images/pets/max.jpg",
       "sterilized": false
     },
     {
@@ -31,7 +31,7 @@
       "age": 1,
       "gender": "Male",
       "description": "Talkative and social",
-      "image_path": "assets/images/pets/charlie.png",
+      "image_path": "assets/images/pets/charlie.jpg",
       "sterilized": false
     },
     {
@@ -42,7 +42,7 @@
       "age": 2,
       "gender": "Female",
       "description": "Loves to hop around and chew on carrots",
-      "image_path": "assets/images/pets/luna.png",
+      "image_path": "assets/images/pets/luna.jpg",
       "sterilized": true
     }
   ]

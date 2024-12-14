@@ -12,7 +12,7 @@ import { Router, ActivatedRoute } from '@angular/router';
   template: `
      <form [formGroup]="form" (ngSubmit)="update()" class="update-container">
        <div class="image-container">
-        <img src="assets/images/pet/updatePet.png" alt="Update Pet"/>
+        <img src="assets/images/pets/updatePet.png" alt="Update Pet"/>
         <h2 class="update-text">Update Pet</h2>
       </div>
       <label></label>

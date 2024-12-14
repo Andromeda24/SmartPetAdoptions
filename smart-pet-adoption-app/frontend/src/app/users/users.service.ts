@@ -7,7 +7,6 @@ import { environment } from '../../environments/environment.development';
   providedIn: 'root'
 })
 export class UsersService {
-
   #http = inject(HttpClient);
 
   signin(user: User) {
