@@ -6,13 +6,7 @@ const userSchema = new Schema({
     email: { type: String, unique: true, required:true },
     password: String,
     role: { type: String, enum : ['ShelterAdmin','PetSeeker'], default:'PetSeeket'},
-    address: {
-        street:String,
-        city:String,
-        state:String,
-        ZipCode:String,
-        location:[Number],
-    },
+    address: String ,
     phone: String,
 }, { timestamps: true, versionKey: false });
 

@@ -1,12 +1,12 @@
 import { RequestHandler } from "express";
 import { sign } from 'jsonwebtoken';
-//import { hash, compare } from 'bcrypt';
+import { hash, compare } from 'bcrypt';
 import { ErrorWithStatus, StandardResponse } from "../common.ts";
 import { User, UserModel } from "./UserModel.ts";
 
 export const signin: RequestHandler<unknown, StandardResponse<{ token: string; }>, User, unknown> = async (req, res, next) => {
     try {
-        /*
+        
         const { email, password } = req.body;
         const user = await UserModel.findOne({ email });
         if (!user) throw new ErrorWithStatus('User not found', 404);
@@ -19,18 +19,18 @@ export const signin: RequestHandler<unknown, StandardResponse<{ token: string; }
 
         const token = sign({
             _id: user._id,
-            fullname: user.fullname,
+            name:user.name,
             email: user.email
         }, process.env.SECRET);
 
         res.status(200).json({ success: true, data: { token } });
-        */
+        
     } catch (err) {
         next(err);
     }
 };
 export const signup: RequestHandler<unknown, StandardResponse<string>, User, unknown> = async (req, res, next) => {
-    try { /*
+    try { 
         const new_user = req.body;
 
         if (!new_user.password) throw new Error('Password is required');
@@ -42,7 +42,7 @@ export const signup: RequestHandler<unknown, StandardResponse<string>, User, unk
         });
 
         res.status(201).json({ success: true, data: results._id.toString() });
-*/
+
     } catch (err) {
         next(err);
     }
