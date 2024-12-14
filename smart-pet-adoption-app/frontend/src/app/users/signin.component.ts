@@ -5,21 +5,34 @@ import { Router } from '@angular/router';
 import { Token, User } from './user.type';
 import { StateService } from '../state.service';
 import { jwtDecode } from 'jwt-decode';
+import { MatListModule } from '@angular/material/list';
+import { CommonModule } from '@angular/common';
+import { BrowserModule } from '@angular/platform-browser';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-signin',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule,MatListModule,CommonModule,RouterModule],
   template: `
   <div class="signin-container">
   <div class="user-ico-container">      
   <img src="assets/images/login/user.png" alt="User Avatar" class="avatar" />
       </div>
-    <form [formGroup]="form" (ngSubmit)="go()">
+      <form [formGroup]="form" (ngSubmit)="go()">
       <input placeholder="email" class="input-field"  [formControl]="form.controls.email"/>
       <input placeholder="password" type="password"  class="input-field"  [formControl]="form.controls.password"/>
       <button [disabled]="form.invalid">Login</button>
-      </form>
-</div>
+  
+  </form>
+  <div>    
+    <mat-list>     
+        <mat-list-item>
+        No Account? <a mat-line [routerLink]="['/signup']">Sign Up</a>
+        </mat-list-item>
+    </mat-list>
+  </div>
+  </div>
+
   `,
   styles: [`
 
@@ -35,7 +48,7 @@ import { jwtDecode } from 'jwt-decode';
       padding: 20px;
       background-color: #fff;
       border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 -4px 8px rgba(0, 0, 0, 0.1);
       text-align: center;
       flex-direction: column;
       align-items: center;
@@ -70,7 +83,7 @@ import { jwtDecode } from 'jwt-decode';
     .signin-container button {
       width: calc(100% - 50%); 
       padding: 10px;
-      background-color: #1d6da8;
+      background-color: #2669a0;
       color: #fff;
       border: none;
       border-radius: 5px;
