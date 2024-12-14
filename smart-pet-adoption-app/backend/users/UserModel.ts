@@ -8,8 +8,16 @@ const userSchema = new Schema({
     role: { type: String, enum : ['ShelterAdmin','PetSeeker'], default:'PetSeeket'},
     address: String ,
     phone: String,
+    profile_picture:String,
 }, { timestamps: true, versionKey: false });
 
-type fullUser = InferSchemaType<typeof userSchema>;
-export type User = Partial<fullUser>;
+//type fullUser = InferSchemaType<typeof userSchema>;
+export type User = { name: string,
+    email: string,
+    password: string,
+    role: string,
+    address?: string ,
+    phone?: string,
+    profile_picture?:string,
+}
 export const UserModel = model<User>('user', userSchema);

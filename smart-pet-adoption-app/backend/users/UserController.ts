@@ -48,14 +48,15 @@ export const signup: RequestHandler<unknown, StandardResponse<string>, User, unk
     }
 };
 
-export const upload_picture: RequestHandler<unknown, StandardResponse<any>> = async (req, res, next) => {
-    try {/*
-        // console.log(req.file);
-        // console.log(req.user);
+export const upload_picture: RequestHandler<unknown, StandardResponse<String>> = async (req, res, next) => {
+    try {
+        console.log (req.headers);
+        console.log (req.file);
         const results = await UserModel.updateOne(
             { _id: req.user?._id },
-            { $set: { picture_url: req.file?.path } });
-        res.json({ success: true, data: results });*/
+            { $set: { picture: req.file?.path } });
+        res.json({ success: true, data: '' });
+        console.log(results)
     } catch (e) {
         next(e);
     }
