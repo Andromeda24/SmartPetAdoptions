@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import { ErrorWithStatus, StandardResponse } from "../common.ts";
 import { Pet, PetModel} from "./PetModel.ts";
 
+const PAGE_SIZE = 5;
 export const newPet: RequestHandler<unknown, StandardResponse<Pet>
             , Pet, unknown> = async (req, res, next) => {
     try { 
@@ -31,26 +32,29 @@ export const newPet: RequestHandler<unknown, StandardResponse<Pet>
 
 export const updatePet: RequestHandler<{id:string}, StandardResponse<{ updated_documents:Number}>
             , Pet, unknown> = async (req, res, next) => {
-
-                if (!req.file) {
-                    // update data
-                    console.log(req.body);
-                    const results = await PetModel.updateOne({_id: req.params.id}
-                        , {$set: {...req.body }}
-                    )
-                
-                    return res.status(200).json({success: true, 
-                        data: { updated_documents:results.modifiedCount}});
-                
-                  } else {
-                    // update Immage
-                    const results = await PetModel.updateOne({_id: req.params.id}
-                        , {$set: {image_url:req.file?.path }}
-                    )
-                
-                    return res.status(200).json({success: true, 
-                        data: { updated_documents:results.modifiedCount}});
-                  }
+    try {
+        if (!req.file) {
+            // update data
+            console.log(req.body);
+            const results = await PetModel.updateOne({_id: req.params.id}
+                , {$set: {...req.body }}
+            )
+        
+            return res.status(200).json({success: true, 
+                data: { updated_documents:results.modifiedCount}});
+        
+            } else {
+            // update Immage
+            const results = await PetModel.updateOne({_id: req.params.id}
+                , {$set: {image_path:req.file?.path }}
+            )
+        
+            return res.status(200).json({success: true, 
+                data: { updated_documents:results.modifiedCount}});
+            }
+        } catch (err) {
+            next(err);
+        }
     
 };
 
@@ -59,7 +63,34 @@ export const deletePet: RequestHandler<unknown, StandardResponse<Pet>
     
 };
 
-export const listPets: RequestHandler<unknown, StandardResponse<Pet>
+export const listPets: RequestHandler<{page: number, ownerId:string} , StandardResponse<Pet[]>
             , Pet, unknown> = async (req, res, next) => {
-    
+
+   try { 
+        let query = {} 
+        let page = 0
+        
+        if (req.params.ownerId){
+            query  = {... query, ownerId: req.params.ownerId} ;
+        } else {
+            query  = {... query, ownerId:""} ; 
+        } 
+        if (Number(req.params.page)){
+            page=Number(req.params.page)-1;
+        } 
+        console.log(query) ;
+        console.log(req.params ) ;
+        const results = await PetModel
+            .find(query
+                ,{_id: 1, name:1,kind:1,breed:1,age:1,gender:1,
+                    description:1,sterilized:1,image_path:1})
+            .skip(page*PAGE_SIZE)
+            .limit(PAGE_SIZE);
+        res.status(201).json({ success: true, data: results });
+
+    } catch (err) {
+        next(err);
+    }
+
+                     
 };

@@ -9,7 +9,7 @@ const petSchema = new Schema({
     gender:{ type: String, enum : ['Male','Female']},
     description: String,
     embeddedDescription:[Number],
-    image_path: String,
+    image_path: { type: String, default:''},
     sterilized: Boolean,
     ownerId: { type: String, default:''}
 }, { timestamps: true, versionKey: false })  

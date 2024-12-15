@@ -20,7 +20,8 @@ const storage = multer.diskStorage({
 const uploadHelper = multer({ dest: 'pictures/'});
 //const uploadHelper = multer(storage);
 
-PetRouter.get('/:page', listPets);
+PetRouter.get('/', listPets);
+PetRouter.get('/:page/:ownerId', listPets);
 PetRouter.post('/', checkToken, newPet);
 PetRouter.put('/picture/:id',checkToken, uploadHelper.single('profile_picture') , updatePet);
 PetRouter.put('/:id',checkToken, updatePet);

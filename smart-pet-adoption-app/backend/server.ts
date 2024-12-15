@@ -27,8 +27,8 @@ app.use('/pets', PetRouter);
 
 // configure Error Handler
 
-//app.use(routerNotFoundHandler);
-//app.use(errorHandler);
+app.use(routerNotFoundHandler);
+app.use(errorHandler);
 
 // Bootup 
 
