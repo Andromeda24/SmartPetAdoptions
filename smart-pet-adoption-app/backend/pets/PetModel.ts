@@ -11,20 +11,22 @@ const petSchema = new Schema({
     embeddedDescription:[Number],
     image_path: String,
     sterilized: Boolean,
+    ownerId: { type: String, default:''}
 }, { timestamps: true, versionKey: false })  
 
 type fullPet = InferSchemaType<typeof petSchema>;
  type InternalPet = {
-    _id:string,
-    name: string,
-    kind: string,
-    breed: string,
-    age: Number,
-    gender:string,
-    description: string,
+    _id?:string,
+    name?: string,
+    kind?: string,
+    breed?: string,
+    age?: Number,
+    gender?:string,
+    description?: string,
     embeddedDescription:[Number],  //just internal
     image_path?: string,
     sterilized: boolean,
+    ownerId?:string
 }
 
 export type Pet = Omit<InternalPet,'embeddedDescription'>; 

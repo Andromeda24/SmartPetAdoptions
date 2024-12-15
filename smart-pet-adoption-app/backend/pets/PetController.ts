@@ -18,6 +18,7 @@ export const newPet: RequestHandler<unknown, StandardResponse<Pet>
                             gender: results.gender,
                             description: results.description,
                             sterilized: results.sterilized,
+                            image_path: results.image_path,
             }
             res.status(201).json({ success: true, data: pet });
     
@@ -28,23 +29,27 @@ export const newPet: RequestHandler<unknown, StandardResponse<Pet>
                     
 };
 
-export const updatePet: RequestHandler<unknown, StandardResponse<Pet>
+export const updatePet: RequestHandler<{id:string}, StandardResponse<{ updated_documents:Number}>
             , Pet, unknown> = async (req, res, next) => {
 
                 if (!req.file) {
-                    console.log("No file received");
-                    return res.send({
-                      success: false
-                    });
+                    // update data
+                    console.log(req.body);
+                    const results = await PetModel.updateOne({_id: req.params.id}
+                        , {$set: {...req.body }}
+                    )
+                
+                    return res.status(200).json({success: true, 
+                        data: { updated_documents:results.modifiedCount}});
                 
                   } else {
-                    console.log('file received');
-                    console.log(req.file);
-                    console.log(req.body);
-                    console.log(req.headers);
-                    return res.send({
-                      success: true
-                    })
+                    // update Immage
+                    const results = await PetModel.updateOne({_id: req.params.id}
+                        , {$set: {image_url:req.file?.path }}
+                    )
+                
+                    return res.status(200).json({success: true, 
+                        data: { updated_documents:results.modifiedCount}});
                   }
     
 };

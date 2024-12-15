@@ -1,9 +1,9 @@
+### new Pet
 POST http://localhost:3000/pets
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVjYzVkYTJlNzlhY2FlNGM3YmExMDMiLCJuYW1lIjoiR3VkcnVtIiwiZW1haWwiOiJ2aXZhdG1hQHZpdmF0bWEub3JnIiwiaWF0IjoxNzM0MTkzNTgxfQ.jVC5on5FM1v3DCGFkJBld7ya-s9zrkV04mSFyThAYkA
 
 {
-    "_id":"",
     "name": "Tonya",
     "kind": "Dog",
     "breed": "crossbreed",
@@ -13,39 +13,80 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVjYzVkY
     "sterilized": "true"
 }
 
-###
-POST http://localhost:3000/users/login
+
+
+### adopt pet
+PUT http://localhost:3000/pets/675ef4377fb9124b38010131
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVjYzVkYTJlNzlhY2FlNGM3YmExMDMiLCJuYW1lIjoiR3VkcnVtIiwiZW1haWwiOiJ2aXZhdG1hQHZpdmF0bWEub3JnIiwiaWF0IjoxNzM0MTkzNTgxfQ.jVC5on5FM1v3DCGFkJBld7ya-s9zrkV04mSFyThAYkA
+
+{
+    "ownerID": "432432543254",
+    "age": "8.5"
+}
+
+
+
+### update pet
+PUT http://localhost:3000/pets/picture/675e6d5a4c01e2d57706a7d2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVjYzVkYTJlNzlhY2FlNGM3YmExMDMiLCJuYW1lIjoiR3VkcnVtIiwiZW1haWwiOiJ2aXZhdG1hQHZpdmF0bWEub3JnIiwiaWF0IjoxNzM0MTkzNTgxfQ.jVC5on5FM1v3DCGFkJBld7ya-s9zrkV04mSFyThAYkA
 Content-Type: application/json
 
 {
-    "email": "vivatma@vivatma.org",
-    "password": "123456"
+    "name": "Tonya",
+    "kind": "Dog",
+    "breed": "crossbreed",
+    "age": "6",
+    "gender":"Female",
+    "description": "This lovely little cow is also a very good guardian.",
+    "sterilized": "true"
 }
 
+
+
 ###
-POST http://localhost:3000/users/pictures
+PUT http://localhost:3000/pets/picture/675e6d5a4c01e2d57706a7d2
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVjYzVkYTJlNzlhY2FlNGM3YmExMDMiLCJuYW1lIjoiR3VkcnVtIiwiZW1haWwiOiJ2aXZhdG1hQHZpdmF0bWEub3JnIiwiaWF0IjoxNzM0MTkzNTgxfQ.jVC5on5FM1v3DCGFkJBld7ya-s9zrkV04mSFyThAYkA
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 
+
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="profile_picture"; filename="lalalamamba.jpg"
+Content-Disposition: form-data; name="profile_picture"; filename="tonya.jpg"
 Content-Type: image/jpeg
 
-< ./mamba.jpg
+< ./tonya.jpg
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
 ###
 
-POST http://localhost:3000/users/signup
+
+### Demo data
+
+### Tonia
+POST http://localhost:3000/pets
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVjYzVkYTJlNzlhY2FlNGM3YmExMDMiLCJuYW1lIjoiR3VkcnVtIiwiZW1haWwiOiJ2aXZhdG1hQHZpdmF0bWEub3JnIiwiaWF0IjoxNzM0MTkzNTgxfQ.jVC5on5FM1v3DCGFkJBld7ya-s9zrkV04mSFyThAYkA
 
 {
-    "name": "Gudrum", 
-    "email": "vivatma@vivatma.org",
-    "password": "123456",
-    "role": "ShelterAdmin",
-    "address": "1407 Red road Coral Gables, Fl",
-    "phone": "945-1234567"
+    "name": "Tonya",
+    "kind": "Dog",
+    "breed": "crossbreed",
+    "age": "6",
+    "gender":"Female",
+    "description": "",
+    "sterilized": "true"
 }
+### Mamba
+POST http://localhost:3000/pets
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVjYzVkYTJlNzlhY2FlNGM3YmExMDMiLCJuYW1lIjoiR3VkcnVtIiwiZW1haWwiOiJ2aXZhdG1hQHZpdmF0bWEub3JnIiwiaWF0IjoxNzM0MTkzNTgxfQ.jVC5on5FM1v3DCGFkJBld7ya-s9zrkV04mSFyThAYkA
 
-###
+{
+    "name": "Mamba",
+    "kind": "Dog",
+    "breed": "crossbreed",
+    "age": "8",
+    "gender":"Female",
+    "description": "This adorable blue-eyed dog loves to be petted. She also enjoys running freely in the meadow and splashing in the nearby puddles",
+    "sterilized": "true"
+}
