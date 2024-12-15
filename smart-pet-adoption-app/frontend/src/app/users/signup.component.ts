@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { UsersService } from './users.service';
 import { Router } from '@angular/router';
 import { Role } from './user.type';
+import { environment } from '../../environments/environment.development';
 
 @Component({
   selector: 'app-signup',
@@ -15,23 +16,27 @@ import { Role } from './user.type';
         <h2 class="signup-text">Sign up</h2>
       </div>
       <label></label>
-      <label for="email">Email :</label>
-      <input placeholder="email" [formControl]="form.controls.email"/>
       <label for="name">Name :</label>
       <input placeholder="name" [formControl]="form.controls.name"/>
+      <label for="email">Email :</label>
+      <input placeholder="email" [formControl]="form.controls.email"/>    
       <label for="password">Password :</label>
       <input placeholder="password" type="password" [formControl]="form.controls.password"/>
-      <label for="phone">Phone :</label>
-      <input placeholder="phone" [formControl]="form.controls.phone"/>
-      <label  for="address">Address :</label>
-      <input placeholder="address" [formControl]="form.controls.address"/>  
-      <label for="file">Profile Picture :</label>
-      <input type="file" [formControl]="form.controls.file" (change)="pickup_file($event)"/>     
       <label for="role">Role :</label> 
       <select id="role" [formControl]="form.controls.role">
       <option *ngFor="let role of roleOptions" [value]="role">{{ role }}</option>
       </select>
+      <label  for="address">Address :</label>
+      <input placeholder="address" [formControl]="form.controls.address"/> 
+      <label for="phone">Phone :</label>
+      <input placeholder="phone" [formControl]="form.controls.phone"/>      
+      <!-- <label for="file">Profile Picture :</label>
+      <input type="file" [formControl]="form.controls.file" (change)="pickup_file($event)"/>      -->
+      
       <button [disabled]="form.invalid">Create Account</button>
+      <div class="error" style="grid-column: 2;">         
+            {{this.form_error}}
+       </div>
     </form>
 
   `,
@@ -76,90 +81,114 @@ import { Role } from './user.type';
         }
 
 
-        input {
-          width: 50%; 
+        input ,select{
+          width: 40%; 
           padding: 8px;
           font-size: 14px;
           border-radius: 4px;
           border: 1px solid #ccc;
         }
 
-        select {
-          width: 52%; 
-          padding: 8px;
-          font-size: 14px;
-          border-radius: 4px;
-          border: 1px solid #ccc;
-        }
-        
-
+              
         input[type="file"] {
           padding: 2px; 
-          width: 51.4%; 
+          width: 40%; 
         }
 
         input[type='checkbox'] {
         width: 20px;
         height: 20px;
         cursor: pointer;
-      }
-        
-        button {
-        grid-column: 2; 
-        width: 30%; 
-        padding: 10px;
-        background-color: #2669a0;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        align-items : center;
-        cursor: pointer;
-        font-size: 16px;        
-      }
-
-      button[disabled] {
-        background-color: #ccc;
-        cursor: not-allowed;
-      }
-
-    
-      input:focus, select:focus {
-        border-color: #007BFF;
-        outline: none;
-      }
+      }    
     `]
 })
 export class SignupComponent {
-  #profile_picture!: File;
+ // #profile_picture!: File;
   #users_service = inject(UsersService);
   #router = inject(Router);
   roleOptions = Object.values(Role);
-  form = inject(FormBuilder).nonNullable.group({
-    'email': ['mga@miu.edu', Validators.required],
-    'name': ['Margret Ang', Validators.required],
-    'password': ['123456', Validators.required],
-    'phone': ['+16412332028', Validators.required],
-    'address': ['1000 North 4th Street Fairfield, Iowa', Validators.required],
-    'file': ['', Validators.required],
-    'role': [Role.Seeker, Validators.required],
-  });
-  pickup_file(event: any) {
-    const input = event.target as HTMLInputElement;
-    if (input.files!.length) {
-      this.#profile_picture = input.files![0];
-    }
+  form_error : string | null = null;
 
-  }
+  form = inject(FormBuilder).nonNullable.group({
+    'name': ['Margret Ang', Validators.required],
+    'email': ['mga@miu.edu', [Validators.required, Validators.email]],   
+    'password': ['123456', Validators.required],
+    'role': [Role.Seeker, Validators.required],
+    'address': ['1000 North 4th Street Fairfield, Iowa', Validators.required],
+    'phone': ['+16412332028', Validators.required] 
+    // 'file': ['', Validators.required],
+   
+  });
+
+
+  ngOnInit() {
+    this.form.valueChanges.subscribe(() => {
+      this.form_error = null;   
+      if (this.form.controls.name.errors?.['required']) {
+        this.form_error = 'Name is required.';
+        return; 
+      }
+
+      if(this.form.controls.email.hasError('email')){
+        this.form_error = 'Invalid email format';
+        return; 
+      }
+
+      if (this.form.controls.email.errors?.['required']) {
+        this.form_error = 'Email is required.';
+        return; 
+      }  
+
+      if (this.form.controls.password.errors?.['required']) {
+        this.form_error = 'Password is required.';
+        return; 
+      }    
+
+      if (this.form.controls.role.errors?.['required']) {
+        this.form_error = 'role is required.';
+        return; 
+      }
+
+      if (this.form.controls.phone.errors?.['required']) {
+        this.form_error = 'Phone is required.';
+        return; 
+      }
+
+      if (this.form.controls.address.errors?.['required']) {
+        this.form_error = 'Address is required.';
+        return; 
+      }    
   
-  go() {
-    const formData = new FormData();
-    formData.append('email', this.form.controls.email.value);
-    formData.append('name', this.form.controls.name.value);
-    formData.append('password', this.form.controls.password.value);
-    formData.append('profile_picture', this.#profile_picture);
-    this.#users_service.singup(formData).subscribe(response => {
-      console.log(response);
-      this.#router.navigate(['', 'signin']);
     });
+  }
+
+  // pickup_file(event: any) {
+  //   const input = event.target as HTMLInputElement;
+  //   if (input.files!.length) {
+  //     this.#profile_picture = input.files![0];
+  //   }
+
+  // }
+  
+  go() { 
+    const formData = new FormData();
+    formData.append('name', this.form.controls.name.value);
+    formData.append('email', this.form.controls.email.value);
+    formData.append('password', this.form.controls.password.value);
+    formData.append('role', this.form.controls.role.value);
+    formData.append('address', this.form.controls.address.value);   
+    formData.append('phone', this.form.controls.phone.value);   
+    this.#users_service.singup(formData).subscribe(response => { 
+      this.#router.navigate(['', 'signin']);
+    },
+    (error) => {      
+      console.error('Signup failed:', error);
+      if (error.toString().includes('duplicate')) { 
+        this.form_error = 'This email is already in use.';
+      } else {
+        this.form_error = environment.INTERNAL_ERROR;
+      }         
+    }
+  );
   }
 }

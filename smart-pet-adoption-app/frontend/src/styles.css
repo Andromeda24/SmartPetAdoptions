@@ -6,21 +6,40 @@ body {
     font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif, 'Segoe UI', 'Ubuntu', 'Open Sans';
   }
 
-button, .mat-button {
+  .error {
+    color: red; 
+    font-size: 12px;
+    margin-top: 5px;
+    align-items: center;
+    justify-content: center;
+  }
+
+ 
+
+  button {
     width: 220px; 
+    grid-column: 2; 
     padding: 10px;
     background-color: #1d6da8;
-    color: #fff;
+    color: white;
     border: none;
     border-radius: 5px;
-    font-size: 14px;
     cursor: pointer;
-    margin-top: 15px;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;         
+    font-size: 16px;
   }
-  
-  /* Optional: hover effect */
+
+  button[disabled] {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+
+
+  input:focus, select:focus {
+    border-color: #007BFF;
+    outline: none;
+  }
+
   button:hover, .mat-button:hover {
     background-color: #1565c0;   
-  }
+  } 
+

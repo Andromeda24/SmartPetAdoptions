@@ -21,15 +21,15 @@ export const initial_state = {
 })
 
 export class StateService {
-   //$state = signal<GlobalState>(initial_state);
-   $state = signal<GlobalState>(test_data);
-
+   $state = signal<GlobalState>(initial_state);
+   //$state = signal<GlobalState>(test_data);
   
-  spaeffect = effect(() => {
-    localStorage.setItem('SPA_APP_STATE', JSON.stringify(this.$state()));
+  spaEffect = effect(() => {
+    localStorage.setItem('SPA_APP_STATE', JSON.stringify(this.$state()));    
   });
 
   isLoggedIn() {
+ //   console.log("State " + JSON.stringify(this.$state) + this.$state()._id)
     return this.$state()._id ? true : false;
   }
 

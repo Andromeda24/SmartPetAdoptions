@@ -13,7 +13,7 @@ import { Router, ActivatedRoute } from '@angular/router';
      <form [formGroup]="form" (ngSubmit)="update()" class="update-container">
        <div class="image-container">
         <img src="assets/images/pets/updatePet.png" alt="Update Pet"/>
-        <h2 class="update-text">Update Pet</h2>
+        <h2 class="h2-text">Update Pet</h2>
       </div>
       <label></label>
       <label for="id">ID :</label>
@@ -36,23 +36,22 @@ import { Router, ActivatedRoute } from '@angular/router';
       <input type="file" [formControl]="form.controls.image_path" (change)="pickup_file($event)"/>  
       <label for="sterilized">Sterilized :</label> 
       <input placeholder="sterilized"  type="checkbox" [formControl]="form.controls.sterilized"/>
-      <button [disabled]="form.invalid">Update</button>
+      <button [disabled]="form.invalid">Update Pet</button>
     </form>
   `,
   styles: [`      
-    .update-container {        
+      .update-container {        
         display: grid; 
         grid-template-columns: 150px 1fr; 
         gap: 10px 20px;
-        width: 440px;
+        width: 50%;
         margin: 20px auto;
         padding: 20px 30px 20px 20px;
         background-color: #fff;
         border: 1px solid #ddd;
         border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        font-family: Arial, sans-serif;
-    }
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 -4px 8px rgba(0, 0, 0, 0.1);         
+       }
 
     .image-container {
         display: flex; 
@@ -67,11 +66,11 @@ import { Router, ActivatedRoute } from '@angular/router';
         margin-right: 10px; 
     }
 
-    .update-text {
-        font-size: 24px;
-        font-weight: bold;
-        color: #333;
-    }
+    .h2-text {
+          font-size: 24px;
+          font-weight: bold;
+          color: #333;
+        }
 
     label {
         text-align: right;
@@ -80,7 +79,7 @@ import { Router, ActivatedRoute } from '@angular/router';
     }
 
     input, select {
-        width: 100%; 
+        width: 40%; 
         padding: 8px;
         font-size: 14px;
         border-radius: 4px;
@@ -89,6 +88,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
     input[type="file"] {
         padding: 2px; 
+        width: 40%; 
     }
 
     input[type='checkbox'] {
@@ -98,6 +98,7 @@ import { Router, ActivatedRoute } from '@angular/router';
     }
         
     button {
+        width: 30%; 
         grid-column: 2; 
         padding: 10px;
         background-color: #28a745;
