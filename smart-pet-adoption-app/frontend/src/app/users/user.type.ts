@@ -3,8 +3,8 @@ export type User = {
   email: string,
   password: string,
   address: string,
-  phonenumber: string,
-  profile_picture?: string;
+  phone: string,
+  // profile_picture?: string;
   role : Role;
 };
 
@@ -16,6 +16,6 @@ export type Token = {
 
 
 export enum Role {
-  Admin = 'Admin',
-  Seeker = 'Seeker',
+  Admin = 'ShelterAdmin',
+  Seeker = 'PetSeeker',
 }

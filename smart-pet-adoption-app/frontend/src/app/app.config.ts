@@ -3,7 +3,6 @@ import { ApplicationConfig, inject, provideAppInitializer, provideZoneChangeDete
 import { provideRouter, Routes } from '@angular/router';
 import { addTokenInterceptor } from './add-token.interceptor';
 import { SigninComponent } from './users/signin.component';
-import { AboutComponent } from './about.component';
 import { StateService } from './state.service';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
@@ -26,12 +25,14 @@ export const appConfig: ApplicationConfig = {
       { path: 'about', loadComponent: () => import('./about.component').then(c => c.AboutComponent) },
       { path: 'signup', loadComponent: () => import('./users/signup.component').then(c => c.SignupComponent) },
       {
-        path: 'pets', loadChildren: () => import('./pets/pets.routes').then(r => r.pets_routes)    
+        path: 'pets', loadChildren: () => import('./pets/pets.routes').then(r => r.pets_routes),
+        canActivate: [() => inject(StateService).isLoggedIn()]  
       },
       {
-        path: 'pets/:id',
-        loadComponent: () => import('./pets/detail.component').then(c => c.PetDetailComponent),
-      }
+        path: 'pets/:id',loadComponent: () => import('./pets/detail.component').then(c => c.PetDetailComponent),
+      }, { path: 'pets/add', loadComponent: () => import('./pets/add.component').then(c => c.AddComponent) }
+       , { path: 'pets/update/:id', loadComponent: () => import('./pets/update.component').then(c => c.UpdateComponent)},
+       
     ]), provideAnimationsAsync(), provideAnimationsAsync()
   ]
 };

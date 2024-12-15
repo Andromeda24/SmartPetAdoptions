@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-// import { CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common';
 // import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { MatPaginator  } from '@angular/material/paginator';
@@ -11,10 +11,12 @@ import { PetTestService } from './pet.service.test';
 import { ViewChild } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { Pet } from './pet.type';
-
+import { MatDialog } from '@angular/material/dialog';
+//import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
+import { MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-list',
-  imports: [MatTableModule,MatSort,MatPaginator,RouterModule],
+  imports: [CommonModule,MatTableModule,MatSort,MatPaginator,RouterModule,MatIconModule],
   template: `
     <div class="list-container">
       <div class="image-container">
@@ -34,6 +36,21 @@ import { Pet } from './pet.type';
           <th mat-header-cell *matHeaderCellDef> Breed </th>
           <td mat-cell *matCellDef="let pet"> {{ pet.breed }} </td>
         </ng-container>
+
+        <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Actions </th>
+        <td mat-cell *matCellDef="let pet">
+        <ng-container *ngIf="user_role === 'ShelterAdmin'"> 
+          <button mat-icon-button (click)="editPet(pet._id)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deletePet(pet._id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+          </ng-container>
+        </td>
+       </ng-container>
+
         <tr mat-header-row *matHeaderRowDef="displayedColumns" mat-sort-header></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
@@ -86,9 +103,19 @@ import { Pet } from './pet.type';
       font-family: Arial, sans-serif;
     }
 
- 
+      button {
+        max-width : 40px;
+        max-height : 40px;
+      }
+      button mat-icon {
+        max-width: 20px; 
+        max-height: 20px;
+      } 
 
-    
+      .mat-cell {
+       vertical-align: top;
+      }
+
     `]
 })
 export class ListComponent {
@@ -99,9 +126,8 @@ export class ListComponent {
   #petTestService = inject(PetTestService);
   pets = signal<Pet[]>([]);
   petsDataSource = new MatTableDataSource<Pet>([]);
-  displayedColumns: string[] = ['name', 'description','breed'];
-
- 
+  user_role= sessionStorage.getItem('user_role');
+  displayedColumns: string[] = ['name', 'description','breed','actions'];
 
   constructor() {
     // this.#petService.get_pets().subscribe(response => {
@@ -143,4 +169,30 @@ export class ListComponent {
   add() {
     this.#router.navigate(['', 'pets', 'add']);
   }
+
+  editPet(petId: string) {
+    console.log('editPet')
+    this.#router.navigate(['/pets/update/', petId]);
+  }
+
+  deletePet(petId: string) {
+    console.log('deletePet')
+    // const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+    //   data: { message: 'Are you sure you want to delete this pet?' }
+    // });
+
+    // dialogRef.afterClosed().subscribe(result => {
+    //   if (result) {
+    //     this.petService.deletePet(petId).subscribe(
+    //       () => {
+    //         this.loadPets(); // Refresh the pet list after deletion
+    //       },
+    //       (error) => {
+    //         console.error('Error deleting pet:', error);
+    //       }
+    //     );
+    //   }
+    // });
+  }
+
 }
