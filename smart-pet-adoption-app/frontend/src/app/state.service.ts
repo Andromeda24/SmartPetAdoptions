@@ -6,13 +6,15 @@ export type GlobalState = {
   email: string,
   _id: string,
   jwt: string;
+  role :string;
 };
 
 export const initial_state = {
   name: '',
   email: '',
   _id: '',
-  jwt: ''
+  jwt: '',
+  role : ''
 };
 
 

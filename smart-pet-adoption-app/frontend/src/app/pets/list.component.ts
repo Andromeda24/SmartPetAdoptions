@@ -12,6 +12,7 @@ import { ViewChild } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { Pet } from './pet.type';
 import { MatDialog } from '@angular/material/dialog';
+import { Role } from '../users/user.type';
 //import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 import { MatIconModule } from '@angular/material/icon';
 @Component({
@@ -40,7 +41,7 @@ import { MatIconModule } from '@angular/material/icon';
         <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef> Actions </th>
         <td mat-cell *matCellDef="let pet">
-        <ng-container *ngIf="user_role === 'ShelterAdmin'"> 
+        <ng-container *ngIf="user_role === admin_role"> 
           <button mat-icon-button (click)="editPet(pet._id)">
             <mat-icon>edit</mat-icon>
           </button>
@@ -128,8 +129,10 @@ export class ListComponent {
   petsDataSource = new MatTableDataSource<Pet>([]);
   user_role= sessionStorage.getItem('user_role');
   displayedColumns: string[] = ['name', 'description','breed','actions'];
-
+  admin_role =  Role.Admin.toLocaleLowerCase();
+  
   constructor() {
+    
     // this.#petService.get_pets().subscribe(response => {
     //   if (response.success) this.pets.set(response.data);
     // });

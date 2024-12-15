@@ -9,11 +9,9 @@ import { FooterComponent } from './footer.component';
   imports: [RouterOutlet, RouterLink, HeaderComponent, FooterComponent],
   template: `  
     <app-header></app-header>
-    <!-- <p> {{state_service.isLoggedIn()}}</p> -->
     <router-outlet />
     @if(!state_service.isLoggedIn()){
-      <a [routerLink]="['','signin']"></a>
-      <!-- <a [routerLink]="['','signup']">Signup</a> -->
+      <a [routerLink]="['','signin']"></a>     
     }@else {     
       <app-footer>       
       </app-footer>

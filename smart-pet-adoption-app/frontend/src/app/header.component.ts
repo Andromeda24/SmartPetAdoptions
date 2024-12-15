@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import {Role } from './users/user.type';
 
 @Component({
   selector: 'app-header',
@@ -17,7 +18,7 @@ import { Router } from '@angular/router';
         <li><a [routerLink]="['/about']">About</a></li>    
         <!-- <li><a [routerLink]="['/adopt']">Adopt a Pet</a></li>    -->
        
-        <ng-container *ngIf="user_role === 'ShelterAdmin'"> 
+        <ng-container *ngIf="user_role === admin_role"> 
          <li class="dropdown"> 
           <div class="dropdown" [ngClass]="{'show': isDropdownOpen}"> 
             <button class="btn dropdown-toggle" type="button" (click)="toggleDropdown()"> 
@@ -123,9 +124,10 @@ button {
 export class HeaderComponent {
   isDropdownOpen = false; 
   user_role= sessionStorage.getItem('user_role')
+  admin_role = Role.Admin.toLocaleLowerCase();
 
   constructor(private router: Router) {
-    console.log(' Header user role'+ this.user_role)
+    console.log(' Header user role'+ this.user_role + this.admin_role)
   }
 
   createPet(): void { 

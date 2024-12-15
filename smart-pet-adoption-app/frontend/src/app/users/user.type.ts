@@ -11,7 +11,8 @@ export type User = {
 export type Token = {
   _id: string,
   email: string,
-  name: string;
+  name: string,
+  role: Role
 };
 
 

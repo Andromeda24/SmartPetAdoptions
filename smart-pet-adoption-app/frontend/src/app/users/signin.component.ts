@@ -154,12 +154,14 @@ export class SigninComponent {
   go() {
       this.#users_service.signin(this.form.value as User).subscribe(response => {
       const decoded = jwtDecode(response.data.token) as Token;
-      sessionStorage.setItem('user_role', 'PetSekker');    
+      sessionStorage.setItem('user_role', decoded.role.toLocaleLowerCase().trim());    
+      console.log("Role Session Storage" + decoded.role.toLocaleLowerCase().trim())
       this.#state.$state.set({
         _id: decoded._id,
         name: decoded.name,
         email: decoded.email,
-        jwt: response.data.token
+        jwt: response.data.token,
+        role: decoded.role
       });
       this.#router.navigate(['', 'pets']);
     },
