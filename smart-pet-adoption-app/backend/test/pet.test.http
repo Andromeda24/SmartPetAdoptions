@@ -1,13 +1,16 @@
-POST http://localhost:3000/users/signup
+POST http://localhost:3000/pets
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVjYzVkYTJlNzlhY2FlNGM3YmExMDMiLCJuYW1lIjoiR3VkcnVtIiwiZW1haWwiOiJ2aXZhdG1hQHZpdmF0bWEub3JnIiwiaWF0IjoxNzM0MTkzNTgxfQ.jVC5on5FM1v3DCGFkJBld7ya-s9zrkV04mSFyThAYkA
 
 {
-    "name": "Gudrum", 
-    "email": "vivatma@vivatma.org",
-    "password": "123456",
-    "role": "ShelterAdmin",
-    "address": "1407 Red road Coral Gables, Fl",
-    "phone": "945-1234567"
+    "_id":"",
+    "name": "Tonya",
+    "kind": "Dog",
+    "breed": "crossbreed",
+    "age": "6",
+    "gender":"Female",
+    "description": "",
+    "sterilized": "true"
 }
 
 ###

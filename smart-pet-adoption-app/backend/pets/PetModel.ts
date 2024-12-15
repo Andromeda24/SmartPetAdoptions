@@ -14,7 +14,21 @@ const petSchema = new Schema({
 }, { timestamps: true, versionKey: false })  
 
 type fullPet = InferSchemaType<typeof petSchema>;
-export type Pet = Partial<fullPet>;
-export const PetModel = model<Pet>('pet', petSchema);
+ type InternalPet = {
+    _id:string,
+    name: string,
+    kind: string,
+    breed: string,
+    age: Number,
+    gender:string,
+    description: string,
+    embeddedDescription:[Number],  //just internal
+    image_path?: string,
+    sterilized: boolean,
+}
+
+export type Pet = Omit<InternalPet,'embeddedDescription'>; 
+
+export const PetModel = model<InternalPet>('pet', petSchema);
 
 
