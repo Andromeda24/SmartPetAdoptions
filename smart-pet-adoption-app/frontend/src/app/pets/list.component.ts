@@ -1,7 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-// import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { MatPaginator  } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort'; 
@@ -11,11 +10,11 @@ import { PetTestService } from './pet.service.test';
 import { ViewChild } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { Pet } from './pet.type';
-import { MatDialog } from '@angular/material/dialog';
 import { Role } from '../users/user.type';
-//import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 import { MatIconModule } from '@angular/material/icon';
 import { StateService } from '../state.service';
+import { PetService } from './pet.service';
+
 
 @Component({
   selector: 'app-list',
@@ -131,28 +130,29 @@ export class ListComponent {
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort!: MatSort;
   #router = inject(Router);
-  //#petService = inject(PetService);
+  #petService = inject(PetService);
   #petTestService = inject(PetTestService);
   pets = signal<Pet[]>([]);
   petsDataSource = new MatTableDataSource<Pet>([]);
   displayedColumns: string[] = ['name', 'description','breed','actions'];
   user_role :string | null = null; 
   admin_role = Role.Admin.toLocaleLowerCase();
-
-  constructor() {
-    
+  constructor() {    
     // this.#petService.get_pets().subscribe(response => {
     //   if (response.success) this.pets.set(response.data);
     // });
+    this.loadPets();
+  }
+
+  loadPets(): void {
     this.#petTestService.get_pets().subscribe(response => {
       console.log("Pet Test Service " + JSON.stringify(response.data))
       if (response.success) {
         this.pets.set(response.data);
         this.petsDataSource.data = response.data;
       }
-    });
+    });  
   }
-
 
   isAdmin(): boolean {
     if (this.#storedState) {
@@ -176,7 +176,6 @@ export class ListComponent {
     } else {
       console.warn('Sort not found!');
     }
-
   }
   // ngAfterViewInit() {
   //   this.pets.subscribe(petData => {
@@ -197,23 +196,16 @@ export class ListComponent {
   }
 
   deletePet(petId: string) {
-    console.log('deletePet')
-    // const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-    //   data: { message: 'Are you sure you want to delete this pet?' }
-    // });
-
-    // dialogRef.afterClosed().subscribe(result => {
-    //   if (result) {
-    //     this.petService.deletePet(petId).subscribe(
-    //       () => {
-    //         this.loadPets(); // Refresh the pet list after deletion
-    //       },
-    //       (error) => {
-    //         console.error('Error deleting pet:', error);
-    //       }
-    //     );
-    //   }
-    // });
+    if (confirm('Are you sure you want to delete this pet?')) {
+      this.#petService.delete_pet(petId).subscribe(
+        () => {
+          this.loadPets(); // Refresh the pet list after deletion
+        },
+        (error) => {
+          console.error('Error deleting pet:', error);
+        },
+      );
+    }
   }
 
 }
