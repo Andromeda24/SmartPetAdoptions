@@ -1,41 +1,39 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import {Role } from './users/user.type';
+import { StateService } from './state.service';
 
 @Component({
   selector: 'app-header',
   imports: [RouterModule,CommonModule],
   template: `
-<header class="header-container"> 
-    <div class="logo"> 
-      <img src="/assets/images/pets/shelter.png" alt="Smart Pet Adoption Logo"> 
-    </div> 
-    <nav> 
-      <ul class="nav-list"> 
-        <li><a routerLink="/">Home</a></li>   
-        <li><a [routerLink]="['/about']">About</a></li>    
-        <!-- <li><a [routerLink]="['/adopt']">Adopt a Pet</a></li>    -->
-       
-        <ng-container *ngIf="user_role === admin_role"> 
-         <li class="dropdown"> 
-          <div class="dropdown" [ngClass]="{'show': isDropdownOpen}"> 
-            <button class="btn dropdown-toggle" type="button" (click)="toggleDropdown()"> 
-              Manage Pet Info 
-            </button> 
-            <ul class="dropdown-menu" [ngClass]="{'show': isDropdownOpen}"> 
-              <li><a class="dropdown-item" [routerLink]="['/pets/add']">Add New Pet</a></li> 
-              <!-- <li><a class="dropdown-item" [routerLink]="['/update-pet']">Update Pet</a></li>  -->
-              <li><a class="dropdown-item" [routerLink]="['/recommend']">Recommend</a></li> 
-            </ul> 
+      <header class="header-container"> 
+          <div class="logo"> 
+            <img src="/assets/images/pets/shelter.png" alt="Smart Pet Adoption Logo"> 
           </div> 
-        </li> 
-        </ng-container>
-      
-      </ul>   
-   </nav> 
-</header>
+          <nav> 
+            <ul class="nav-list"> 
+              <li><a routerLink="/">Home</a></li>   
+              <li><a [routerLink]="['/about']">About</a></li>     
+              <ng-container *ngIf="isAdmin()"> 
+              <li class="dropdown"> 
+                <div class="dropdown" [ngClass]="{'show': isDropdownOpen}"> 
+                  <button class="btn dropdown-toggle" type="button" (click)="toggleDropdown()"> 
+                    Manage Pet Info 
+                  </button> 
+                  <ul class="dropdown-menu" [ngClass]="{'show': isDropdownOpen}"> 
+                    <li><a class="dropdown-item" [routerLink]="['/pets/add']">Add New Pet</a></li>        
+                    <li><a class="dropdown-item" [routerLink]="['/pets/recommend']">Recommend</a></li> 
+                  </ul> 
+                </div> 
+              </li> 
+              </ng-container>
+            
+            </ul>   
+        </nav> 
+      </header>
   `,
   styles: [`
 .header-container {
@@ -58,7 +56,6 @@ import {Role } from './users/user.type';
   list-style: none;
   padding: 5px; 
   margin: 4px;
-  color: white;
 }
 
 .header-container nav .nav-list > li {
@@ -95,7 +92,7 @@ a {
   border: 0px solid #ddd;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   color: white;
-  margin-top: 5px; /* Add a small space between toggle and menu */
+  margin-top: 5px; 
 }
 
 .dropdown-menu.show {
@@ -104,7 +101,12 @@ a {
 }
 
 .dropdown-menu li {
-  padding: 8px 12px;
+  padding: 8px 12px;  
+}
+
+
+.dropdown-item:hover{
+  background-color : #45c7fd;
 }
 
 button {
@@ -121,14 +123,18 @@ button {
 
     `]
 })
-export class HeaderComponent {
+export class HeaderComponent{
+  #state_service = inject(StateService);
+  #storedState = localStorage.getItem('SPA_APP_STATE');
   isDropdownOpen = false; 
-  user_role= sessionStorage.getItem('user_role')
+  user_role :string | null = null; 
   admin_role = Role.Admin.toLocaleLowerCase();
 
+
   constructor(private router: Router) {
-    console.log(' Header user role'+ this.user_role + this.admin_role)
+    console.log(' Header user role ****'+ this.user_role +  ' admin role *****'+this.admin_role)
   }
+
 
   createPet(): void { 
     console.log('Navigate to Create Pet Form');
@@ -147,5 +153,15 @@ export class HeaderComponent {
 
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  isAdmin(): boolean {
+    if (this.#storedState) {
+      const parsedState = JSON.parse(this.#storedState);
+      const user_role = parsedState.role.toLocaleLowerCase().trim();
+      console.log('User role stored state  haha *****'+user_role)
+      return user_role === this.admin_role;
+    }
+    return false;
   }
 }

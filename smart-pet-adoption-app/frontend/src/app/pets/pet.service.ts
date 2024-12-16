@@ -30,4 +30,8 @@ export class PetService {
   delete_pet(pet_id: string) {
     return this.#http.delete<StandardResponse<number>>(environment.SERVER_URL + `pets/${pet_id}`);
   }
+
+  recommand_pet(searchQuery :string){
+    return this.#http.post<StandardResponse<Pet>>(environment.SERVER_URL + 'pets/recommand', searchQuery);
+  }
 }

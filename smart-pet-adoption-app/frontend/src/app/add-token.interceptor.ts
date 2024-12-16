@@ -12,6 +12,4 @@ export const addTokenInterceptor: HttpInterceptorFn = (req, next) => {
   } else {
     return next(req);
   }
-
-
 };

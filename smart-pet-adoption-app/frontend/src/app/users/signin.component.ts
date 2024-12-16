@@ -25,8 +25,7 @@ import { environment } from '../../environments/environment.development';
       <button [disabled]="form.invalid">Login</button>              
           <div class="error">         
             {{this.form_error}}
-          </div>       
-        
+          </div>         
   </form>
   <div>    
     <mat-list>     
@@ -154,8 +153,7 @@ export class SigninComponent {
   go() {
       this.#users_service.signin(this.form.value as User).subscribe(response => {
       const decoded = jwtDecode(response.data.token) as Token;
-      sessionStorage.setItem('user_role', decoded.role.toLocaleLowerCase().trim());    
-      console.log("Role Session Storage" + decoded.role.toLocaleLowerCase().trim())
+      console.log("Role in SIGN IN *********" + decoded.role.toLocaleLowerCase().trim())
       this.#state.$state.set({
         _id: decoded._id,
         name: decoded.name,

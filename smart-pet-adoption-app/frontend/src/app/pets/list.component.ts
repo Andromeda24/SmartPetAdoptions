@@ -1,7 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-// import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { MatPaginator  } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort'; 
@@ -11,10 +10,12 @@ import { PetTestService } from './pet.service.test';
 import { ViewChild } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { Pet } from './pet.type';
-import { MatDialog } from '@angular/material/dialog';
 import { Role } from '../users/user.type';
-//import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 import { MatIconModule } from '@angular/material/icon';
+import { StateService } from '../state.service';
+import { PetService } from './pet.service';
+
+
 @Component({
   selector: 'app-list',
   imports: [CommonModule,MatTableModule,MatSort,MatPaginator,RouterModule,MatIconModule],
@@ -37,11 +38,10 @@ import { MatIconModule } from '@angular/material/icon';
           <th mat-header-cell *matHeaderCellDef> Breed </th>
           <td mat-cell *matCellDef="let pet"> {{ pet.breed }} </td>
         </ng-container>
-
         <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef> Actions </th>
         <td mat-cell *matCellDef="let pet">
-        <ng-container *ngIf="user_role === admin_role"> 
+        <ng-container *ngIf="isAdmin()"> 
           <button mat-icon-button (click)="editPet(pet._id)">
             <mat-icon>edit</mat-icon>
           </button>
@@ -93,13 +93,13 @@ import { MatIconModule } from '@angular/material/icon';
       .list-container button {
       width: calc(100% - 50%); 
       padding: 10px;
-      background-color: #1d6da8;
+      background-color:rgb(53, 108, 148);
       color: #fff;
       border: none;
       border-radius: 5px;
-      font-size: 14px;
+      font-size: 10px;
       cursor: pointer;
-      margin-top: 15px;
+      margin-top: 0px;
       box-sizing: border-box;
       font-family: Arial, sans-serif;
     }
@@ -108,6 +108,7 @@ import { MatIconModule } from '@angular/material/icon';
         max-width : 40px;
         max-height : 40px;
       }
+      
       button mat-icon {
         max-width: 20px; 
         max-height: 20px;
@@ -117,34 +118,51 @@ import { MatIconModule } from '@angular/material/icon';
        vertical-align: top;
       }
 
+      .action-buttons {
+        display: flex;
+        gap: 5px; /* Adjust spacing as needed */
+      }
     `]
 })
 export class ListComponent {
+  #state_service = inject(StateService);
+  #storedState = localStorage.getItem('SPA_APP_STATE');
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort!: MatSort;
   #router = inject(Router);
-  //#petService = inject(PetService);
+  #petService = inject(PetService);
   #petTestService = inject(PetTestService);
   pets = signal<Pet[]>([]);
   petsDataSource = new MatTableDataSource<Pet>([]);
-  user_role= sessionStorage.getItem('user_role');
   displayedColumns: string[] = ['name', 'description','breed','actions'];
-  admin_role =  Role.Admin.toLocaleLowerCase();
-  
-  constructor() {
-    
+  user_role :string | null = null; 
+  admin_role = Role.Admin.toLocaleLowerCase();
+  constructor() {    
     // this.#petService.get_pets().subscribe(response => {
     //   if (response.success) this.pets.set(response.data);
     // });
+    this.loadPets();
+  }
+
+  loadPets(): void {
     this.#petTestService.get_pets().subscribe(response => {
       console.log("Pet Test Service " + JSON.stringify(response.data))
       if (response.success) {
         this.pets.set(response.data);
         this.petsDataSource.data = response.data;
       }
-    });
+    });  
   }
 
+  isAdmin(): boolean {
+    if (this.#storedState) {
+      const parsedState = JSON.parse(this.#storedState);
+      const user_role = parsedState.role.toLocaleLowerCase().trim();
+      console.log('User role stored state  haha *****'+user_role)
+      return user_role === this.admin_role;
+    }
+    return false;
+  }
 
   ngAfterViewInit() {
     if (this.paginator) {
@@ -158,7 +176,6 @@ export class ListComponent {
     } else {
       console.warn('Sort not found!');
     }
-
   }
   // ngAfterViewInit() {
   //   this.pets.subscribe(petData => {
@@ -179,23 +196,16 @@ export class ListComponent {
   }
 
   deletePet(petId: string) {
-    console.log('deletePet')
-    // const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-    //   data: { message: 'Are you sure you want to delete this pet?' }
-    // });
-
-    // dialogRef.afterClosed().subscribe(result => {
-    //   if (result) {
-    //     this.petService.deletePet(petId).subscribe(
-    //       () => {
-    //         this.loadPets(); // Refresh the pet list after deletion
-    //       },
-    //       (error) => {
-    //         console.error('Error deleting pet:', error);
-    //       }
-    //     );
-    //   }
-    // });
+    if (confirm('Are you sure you want to delete this pet?')) {
+      this.#petService.delete_pet(petId).subscribe(
+        () => {
+          this.loadPets(); // Refresh the pet list after deletion
+        },
+        (error) => {
+          console.error('Error deleting pet:', error);
+        },
+      );
+    }
   }
 
 }

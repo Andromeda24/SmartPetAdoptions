@@ -5,6 +5,8 @@ import { addTokenInterceptor } from './add-token.interceptor';
 import { SigninComponent } from './users/signin.component';
 import { StateService } from './state.service';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+//import { RecommandComponent } from './pets/recommand.component';
+import { HomeComponent } from './home.component';
 
 function initialize() {
   const state_service = inject(StateService);
@@ -20,10 +22,12 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([addTokenInterceptor])),
     provideAppInitializer(initialize),
     provideRouter([
-      { path: '', redirectTo: 'signin', pathMatch: 'full' },        
+      { path: '', component: HomeComponent },
+      { path: 'home', redirectTo: '', pathMatch: 'full' },      
       { path: 'signin', component: SigninComponent },     
       { path: 'about', loadComponent: () => import('./about.component').then(c => c.AboutComponent) },
       { path: 'signup', loadComponent: () => import('./users/signup.component').then(c => c.SignupComponent) },
+      { path: 'pets/recommend', loadComponent: () => import('./pets/ai-recommand.component').then(c => c.AiRecommandComponent) },
       {
         path: 'pets', loadChildren: () => import('./pets/pets.routes').then(r => r.pets_routes),
         canActivate: [() => inject(StateService).isLoggedIn()]  
@@ -31,8 +35,8 @@ export const appConfig: ApplicationConfig = {
       {
         path: 'pets/:id',loadComponent: () => import('./pets/detail.component').then(c => c.PetDetailComponent),
       }, { path: 'pets/add', loadComponent: () => import('./pets/add.component').then(c => c.AddComponent) }
-       , { path: 'pets/update/:id', loadComponent: () => import('./pets/update.component').then(c => c.UpdateComponent)},
-       
+       , { path: 'pets/update/:id', loadComponent: () => import('./pets/update.component').then(c => c.UpdateComponent)}
+   
     ]), provideAnimationsAsync(), provideAnimationsAsync()
   ]
 };

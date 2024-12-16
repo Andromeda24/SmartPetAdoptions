@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { PetService } from './pet.service';
 import { Pet } from './pet.type';
 import { Gender } from './pet.type';
+import { Kind } from './pet.type';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -21,7 +22,9 @@ import { Router, ActivatedRoute } from '@angular/router';
       <label for="name">Name :</label>
       <input placeholder="name" [formControl]="form.controls.name"/>
       <label for="kind">Kind :</label>
-      <input placeholder="kind" [formControl]="form.controls.kind"/>
+      <select id="kind" [formControl]="form.controls.kind">
+      <option *ngFor="let kind of kindOptions" [value]="kind">{{ kind }}</option>
+      </select>
       <label for="breed">Breed :</label>
       <input placeholder="breed" [formControl]="form.controls.breed"/>
       <label for="age">Age :</label>
@@ -37,6 +40,10 @@ import { Router, ActivatedRoute } from '@angular/router';
       <label for="sterilized">Sterilized :</label> 
       <input placeholder="sterilized"  type="checkbox" [formControl]="form.controls.sterilized"/>
       <button [disabled]="form.invalid">Update Pet</button>
+
+      <div class="error" style="grid-column: 2;">         
+            {{this.form_error}}
+       </div>
     </form>
   `,
   styles: [`      
@@ -125,15 +132,16 @@ export class UpdateComponent implements OnInit {
   #petService = inject(PetService);
   #router = inject(Router);
   #route = inject(ActivatedRoute);
-
+  kindOptions = Object.values(Kind);
   genderOptions = Object.values(Gender);
+  form_error : string | null = null;
 
   form = inject(FormBuilder).nonNullable.group({
     '_id': ['', Validators.required],
     'name': ['', Validators.required],
-    'kind': ['', Validators.required],
+    'kind': [Kind.Dog, Validators.required],
     'breed': ['', Validators.required],
-    'age': [0, Validators.required],
+    'age': [0, [Validators.required,Validators.pattern(/^\d+$/)]],
     'gender': ['', Validators.required],
     'description': ['', Validators.required],
     'image_path': ['', Validators.required],
@@ -141,6 +149,53 @@ export class UpdateComponent implements OnInit {
   });
 
   ngOnInit() {
+
+  
+      this.form.valueChanges.subscribe(() => {
+        this.form_error = null;   
+        if (this.form.controls.name.errors?.['required']) {
+          this.form_error = 'Name is required.';
+          return; 
+        }
+  
+        if (this.form.controls.kind.errors?.['required']) {
+          this.form_error = 'Kind is required.';
+          return; 
+        }  
+  
+        if (this.form.controls.breed.errors?.['required']) {
+          this.form_error = 'Breed is required.';
+          return; 
+        }    
+  
+        if (this.form.controls.age.errors?.['required']) {
+          this.form_error = 'Age is required.';
+          return; 
+        }
+
+        if (this.form.controls.age.errors?.['pattern']) {
+          this.form_error  = `Invalid format for age.`;
+          return; 
+        }
+  
+        if (this.form.controls.gender.errors?.['required']) {
+          this.form_error = 'Gender is required.';
+          return; 
+        }
+  
+        if (this.form.controls.description.errors?.['required']) {
+          this.form_error = 'Description is required.';
+          return; 
+        }    
+    
+        if (this.form.controls.sterilized.errors?.['required']) {
+          this.form_error = 'Sterilized is required.';
+          return; 
+        }   
+  
+      });
+    
+
     const petId = this.#route.snapshot.paramMap.get('id'); // Get ID from route
     if (petId) {
       this.#petService.get_pet(petId).subscribe(response =>{
