@@ -3,18 +3,18 @@ import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { initial_state, StateService } from './state.service';
 import { HeaderComponent } from './header.component'
 import { FooterComponent } from './footer.component';
-
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, RouterLink, HeaderComponent, FooterComponent],
-  template: `  
-    <app-header></app-header>
-    <router-outlet />
-    @if(!state_service.isLoggedIn()){
-      <a [routerLink]="['','signin']"></a>     
-    }@else {     
-      <app-footer>       
-      </app-footer>
+  template: `      
+    <!-- {{state_service.isLoggedIn()}} -->
+    @if(state_service.isLoggedIn()){
+      <app-header></app-header> 
+      <router-outlet />
+      <app-footer></app-footer>      
+    }@else {    
+      <router-outlet />     
+       <a [routerLink]="['','home']"></a> 
     }    
   `,
   styles: [`

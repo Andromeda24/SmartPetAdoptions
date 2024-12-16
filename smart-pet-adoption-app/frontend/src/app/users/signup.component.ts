@@ -110,12 +110,12 @@ export class SignupComponent {
   form_error : string | null = null;
 
   form = inject(FormBuilder).nonNullable.group({
-    'name': ['Margret Ang', Validators.required],
-    'email': ['mga@miu.edu', [Validators.required, Validators.email]],   
-    'password': ['123456', Validators.required],
+    'name': ['', Validators.required],
+    'email': ['', [Validators.required, Validators.email]],   
+    'password': ['', Validators.required],
     'role': [Role.Seeker, Validators.required],
-    'address': ['1000 North 4th Street Fairfield, Iowa', Validators.required],
-    'phone': ['+16412332028', Validators.required] 
+    'address': ['', Validators.required],
+    'phone': ['', Validators.required] 
     // 'file': ['', Validators.required],
    
   });

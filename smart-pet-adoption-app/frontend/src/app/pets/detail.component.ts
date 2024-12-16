@@ -4,7 +4,7 @@ import { PetTestService } from './pet.service.test';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { Location } from '@angular/common';
-import { Pet } from './pet.model'
+import { Pet } from './pet.type'
 
 @Component({
   selector: 'app-detail',
@@ -84,11 +84,9 @@ export class PetDetailComponent {
       this.petTestService.get_pet(this.id).subscribe(
         response => {
           if (response.success) {
-            this.pet = response.data;  
-        
+            this.pet = response.data;          
           } else {
-            this.pet = null;  
-          
+            this.pet = null;           
           }
         },
         (error) => {

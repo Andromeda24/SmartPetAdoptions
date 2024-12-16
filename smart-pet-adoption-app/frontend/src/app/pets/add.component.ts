@@ -5,6 +5,7 @@ import { PetService } from './pet.service';
 import { Pet } from './pet.type';
 import { Gender } from './pet.type';
 import { Router } from '@angular/router';
+import { Kind } from './pet.type';
 
 @Component({
   selector: 'app-add',
@@ -21,7 +22,11 @@ import { Router } from '@angular/router';
       <label for="name">Name :</label>
       <input placeholder="name" [formControl]="form.controls.name"/>
       <label for="kind">Kind :</label>
-      <input placeholder="kind" [formControl]="form.controls.kind"/>
+      <!-- <input placeholder="kind" [formControl]="form.controls.kind"/> -->
+      <select id="kind" [formControl]="form.controls.kind">
+      <option *ngFor="let kind of kindOptions" [value]="kind">{{ kind }}</option>
+      </select>
+
       <label for="breed">Breed :</label>
       <input placeholder="breed" [formControl]="form.controls.breed"/>
 
@@ -38,6 +43,9 @@ import { Router } from '@angular/router';
       <label for="sterilized">Sterilized :</label> 
       <input placeholder="sterilized"  type="checkbox" [formControl]="form.controls.sterilized"/>
       <button [disabled]="form.invalid">Create Pet</button>
+      <div class="error" style="grid-column: 2;">         
+            {{this.form_error}}
+       </div>
     </form>
   `,
   styles: [`      
@@ -110,18 +118,62 @@ export class AddComponent {
   #petService = inject(PetService);
   #router = inject(Router);
   genderOptions = Object.values(Gender);
+  kindOptions = Object.values(Kind);
+  form_error : string | null = null;
 
-  // ngOnInit() {
-  //   this.form.controls.gender.setValue(Gender.Female); // Manually set default
-  //   console.log('Initial Gender Value:', this.form.controls.gender.value);
-  // }
+  ngOnInit() {
+    this.form.valueChanges.subscribe(() => {
+      this.form_error = null;   
+      if (this.form.controls.name.errors?.['required']) {
+        this.form_error = 'Name is required.';
+        return; 
+      }
+
+      if (this.form.controls.kind.errors?.['required']) {
+        this.form_error = 'Kind is required.';
+        return; 
+      }  
+
+      if (this.form.controls.breed.errors?.['required']) {
+        this.form_error = 'Breed is required.';
+        return; 
+      }    
+
+      if (this.form.controls.age.errors?.['required']) {
+        this.form_error = 'Age is required.';
+        return; 
+      }
+
+      if (this.form.controls.age.errors?.['pattern']) {
+        this.form_error  = `Invalid format for age.`;
+        return; 
+      }
+
+
+      if (this.form.controls.gender.errors?.['required']) {
+        this.form_error = 'Gender is required.';
+        return; 
+      }
+
+      if (this.form.controls.description.errors?.['required']) {
+        this.form_error = 'Description is required.';
+        return; 
+      }    
+  
+      if (this.form.controls.sterilized.errors?.['required']) {
+        this.form_error = 'Sterilized is required.';
+        return; 
+      }   
+
+    });
+  }
 
   form = inject(FormBuilder).nonNullable.group({
     '_id': ['', Validators.required],
     'name': ['', Validators.required],
-    'kind': ['', Validators.required],
+    'kind': [Kind.Dog, Validators.required],
     'breed': ['', Validators.required],
-    'age': [0, Validators.required],
+    'age': [0, [Validators.required,Validators.pattern(/^\d+$/)]],
     'gender': [ Gender.Female, Validators.required],
     'description': ['', Validators.required],
     'image_path': ['', Validators.required],
@@ -136,8 +188,7 @@ export class AddComponent {
 
   }
 
-  go() {
-  
+  go() {  
     this.#petService.post_pet(this.form.value as Pet).subscribe(response => {
       if (response.success) {
         this.#router.navigate(['', 'pets']);

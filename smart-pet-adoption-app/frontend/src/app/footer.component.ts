@@ -7,9 +7,9 @@ import { initial_state, StateService } from './state.service';
   imports: [],
   template: `
 <footer class="footer-container">     
-  <!-- <p>Footer</p> -->
-  <button (click)="signout()">Log out</button>      
-  <!-- <p> {{state_service.isLoggedIn()}}</p> -->
+  @if(state_service.isLoggedIn()){
+  <button (click)="signout()">Log out</button>   
+  }   
 </footer>
   `,
   styles: [`
@@ -20,8 +20,7 @@ import { initial_state, StateService } from './state.service';
       align-items: center;
       padding: 10px;
       color: white;
-      height: 10vh;
-      
+      height: 10vh;      
     }
  
     `]
@@ -30,13 +29,13 @@ export class FooterComponent {
   state_service = inject(StateService);
   #router = inject(Router);
     constructor(private router: Router) {
-      console.log("Session storage " +sessionStorage.getItem("user_role"))
+ 
     }
-    signout() {
-      sessionStorage.clear();
+    
+    signout() {     
       localStorage.clear();
       this.state_service.$state.set(initial_state);
-      this.#router.navigate(['', 'signin']);
+      this.#router.navigate(['', 'home']);
     }
   
 }

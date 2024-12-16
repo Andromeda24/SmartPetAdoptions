@@ -15,6 +15,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { Role } from '../users/user.type';
 //import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 import { MatIconModule } from '@angular/material/icon';
+import { StateService } from '../state.service';
+
 @Component({
   selector: 'app-list',
   imports: [CommonModule,MatTableModule,MatSort,MatPaginator,RouterModule,MatIconModule],
@@ -37,11 +39,10 @@ import { MatIconModule } from '@angular/material/icon';
           <th mat-header-cell *matHeaderCellDef> Breed </th>
           <td mat-cell *matCellDef="let pet"> {{ pet.breed }} </td>
         </ng-container>
-
         <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef> Actions </th>
         <td mat-cell *matCellDef="let pet">
-        <ng-container *ngIf="user_role === admin_role"> 
+        <ng-container *ngIf="isAdmin()"> 
           <button mat-icon-button (click)="editPet(pet._id)">
             <mat-icon>edit</mat-icon>
           </button>
@@ -93,13 +94,13 @@ import { MatIconModule } from '@angular/material/icon';
       .list-container button {
       width: calc(100% - 50%); 
       padding: 10px;
-      background-color: #1d6da8;
+      background-color:rgb(53, 108, 148);
       color: #fff;
       border: none;
       border-radius: 5px;
-      font-size: 14px;
+      font-size: 10px;
       cursor: pointer;
-      margin-top: 15px;
+      margin-top: 0px;
       box-sizing: border-box;
       font-family: Arial, sans-serif;
     }
@@ -108,6 +109,7 @@ import { MatIconModule } from '@angular/material/icon';
         max-width : 40px;
         max-height : 40px;
       }
+      
       button mat-icon {
         max-width: 20px; 
         max-height: 20px;
@@ -117,9 +119,15 @@ import { MatIconModule } from '@angular/material/icon';
        vertical-align: top;
       }
 
+      .action-buttons {
+        display: flex;
+        gap: 5px; /* Adjust spacing as needed */
+      }
     `]
 })
 export class ListComponent {
+  #state_service = inject(StateService);
+  #storedState = localStorage.getItem('SPA_APP_STATE');
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort!: MatSort;
   #router = inject(Router);
@@ -127,10 +135,10 @@ export class ListComponent {
   #petTestService = inject(PetTestService);
   pets = signal<Pet[]>([]);
   petsDataSource = new MatTableDataSource<Pet>([]);
-  user_role= sessionStorage.getItem('user_role');
   displayedColumns: string[] = ['name', 'description','breed','actions'];
-  admin_role =  Role.Admin.toLocaleLowerCase();
-  
+  user_role :string | null = null; 
+  admin_role = Role.Admin.toLocaleLowerCase();
+
   constructor() {
     
     // this.#petService.get_pets().subscribe(response => {
@@ -145,6 +153,16 @@ export class ListComponent {
     });
   }
 
+
+  isAdmin(): boolean {
+    if (this.#storedState) {
+      const parsedState = JSON.parse(this.#storedState);
+      const user_role = parsedState.role.toLocaleLowerCase().trim();
+      console.log('User role stored state  haha *****'+user_role)
+      return user_role === this.admin_role;
+    }
+    return false;
+  }
 
   ngAfterViewInit() {
     if (this.paginator) {
