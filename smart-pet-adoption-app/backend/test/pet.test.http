@@ -42,6 +42,13 @@ Content-Type: application/json
     "sterilized": "true"
 }
 
+
+### delete pet
+DELETE http://localhost:3000/pets/675fb79ee09a04a85c8902e7
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVjYzVkYTJlNzlhY2FlNGM3YmExMDMiLCJuYW1lIjoiR3VkcnVtIiwiZW1haWwiOiJ2aXZhdG1hQHZpdmF0bWEub3JnIiwiaWF0IjoxNzM0MTkzNTgxfQ.jVC5on5FM1v3DCGFkJBld7ya-s9zrkV04mSFyThAYkA
+Content-Type: application/json
+
+
 ### get not-owned pet list
 GET http://localhost:3000/pets
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVjYzVkYTJlNzlhY2FlNGM3YmExMDMiLCJuYW1lIjoiR3VkcnVtIiwiZW1haWwiOiJ2aXZhdG1hQHZpdmF0bWEub3JnIiwiaWF0IjoxNzM0MTkzNTgxfQ.jVC5on5FM1v3DCGFkJBld7ya-s9zrkV04mSFyThAYkA
@@ -65,8 +72,41 @@ Content-Type: image/jpeg
 < ./tonya.jpg
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
-###
+### Error test
+### new Pet No token
 
+POST http://localhost:3000/pets
+Content-Type: application/json
+
+
+
+{
+    "name": "Tonya",
+    "kind": "Dog",
+    "breed": "crossbreed",
+    "age": "6",
+    "gender":"Female",
+    "description": "",
+    "sterilized": "true"
+}
+
+
+### new Pet. User Not authorized
+
+POST http://localhost:3000/pets
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVmYjcwZGUwOWEwNGE4NWM4OTAyZTQiLCJuYW1lIjoiSnVsaWEiLCJlbWFpbCI6Imp1bGlhQGdnbWFpbC5jb20iLCJyb2xlIjoiUGV0U2Vla2VyIiwiaWF0IjoxNzM0MzI2MDgwfQ.9LFBt02trhSdtctGYkTMApgFyQmEhdDlTz90vBlJ7t8
+
+
+{
+    "name": "Tonya",
+    "kind": "Dog",
+    "breed": "crossbreed",
+    "age": "6",
+    "gender":"Female",
+    "description": "",
+    "sterilized": "true"
+}
 
 ### Demo data
 
@@ -113,6 +153,22 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVjYzVkY
     "description": "The most photogenic model, whether freshly groomed or shaggy. Independent and affectionate, ideal for a family with children",
     "sterilized": "false"
 }
+
+### update picture 
+### Nacho 675f07a4333ab06862f924a8
+### NOnna
+PUT http://localhost:3000/pets/picture/675f07a4333ab06862f924a8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVjYzVkYTJlNzlhY2FlNGM3YmExMDMiLCJuYW1lIjoiR3VkcnVtIiwiZW1haWwiOiJ2aXZhdG1hQHZpdmF0bWEub3JnIiwiaWF0IjoxNzM0MTkzNTgxfQ.jVC5on5FM1v3DCGFkJBld7ya-s9zrkV04mSFyThAYkA
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="profile_picture"; filename="tonya.jpg"
+Content-Type: image/jpeg
+
+< ./nacho.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
 
 ### Egon 675f01126aa4280c116e1073
 POST http://localhost:3000/pets
@@ -167,6 +223,22 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVjYzVkY
 {
     "name": "Da Vinci",
     "kind": "Dog",
+    "breed": "Mixed Labrador",
+    "age": "10",
+    "gender":"Male",
+    "description": "An active and protective senior, with a heart of caramel. He would love to have his own family, and hopefully another toothless dog, to steal his bed and toys. He is as good as bread, only the neighbor dogs fear his fierce barking, with which he manages to scare them away. His “mission accomplished” look is worth gold.",
+    "sterilized": "true"
+}
+
+
+### Twix
+POST http://localhost:3000/pets
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVjYzVkYTJlNzlhY2FlNGM3YmExMDMiLCJuYW1lIjoiR3VkcnVtIiwiZW1haWwiOiJ2aXZhdG1hQHZpdmF0bWEub3JnIiwiaWF0IjoxNzM0MTkzNTgxfQ.jVC5on5FM1v3DCGFkJBld7ya-s9zrkV04mSFyThAYkA
+
+{
+    "name": "Twix",
+    "kind": "Cat",
     "breed": "Mixed Labrador",
     "age": "10",
     "gender":"Male",

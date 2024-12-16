@@ -14,11 +14,13 @@ import PetRouter from './pets/PetRouter'
 dotenv.config();
 const app = express();
 connect_db();
-
+console.log('Loading' + path.join(__dirname, 'pictures'))
 // Configure the server
 app.use(morgan('dev'));
 app.use(cors());
-app.use('/pictures', express.static(path.join(__dirname, 'uploads')));
+app.use('/pictures', express.static ('./pictures/'));
+//app.use('/pictures', express.static(path.join(__dirname, 'pictures')));
+
 app.use(json());
 
 // configure the router

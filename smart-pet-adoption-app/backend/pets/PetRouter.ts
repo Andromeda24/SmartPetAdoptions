@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { checkToken } from '../users/UserMiddleware';
+import { checkToken, checkAdm } from '../users/UserMiddleware';
 import multer from 'multer';
 import { listPets, newPet,updatePet,deletePet } from './PetController';
 
@@ -22,9 +22,9 @@ const uploadHelper = multer({ dest: 'pictures/'});
 
 PetRouter.get('/', listPets);
 PetRouter.get('/:page/:ownerId', listPets);
-PetRouter.post('/', checkToken, newPet);
-PetRouter.put('/picture/:id',checkToken, uploadHelper.single('profile_picture') , updatePet);
-PetRouter.put('/:id',checkToken, updatePet);
-PetRouter.delete('/:id',deletePet);
+PetRouter.post('/', checkToken,  checkAdm, newPet);
+PetRouter.put('/picture/:petid',checkToken, checkAdm, uploadHelper.single('profile_picture') , updatePet);
+PetRouter.put('/:id',checkToken, checkAdm, updatePet);
+PetRouter.delete('/:petid',deletePet);
 
 export default PetRouter;

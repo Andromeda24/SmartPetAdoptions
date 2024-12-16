@@ -18,3 +18,17 @@ export const checkToken: RequestHandler = async (req, res, next) => {
         next(e);
     }
 };
+
+export const checkAdm: RequestHandler = async (req, res, next) => {
+    try {
+        console.log(req.user.role)
+        if (req.user.role === 'ShelterAdmin'){
+            next();
+        } else {
+            throw new ErrorWithStatus('The user does not have access rights to do this action', 403);
+        } 
+    } catch (e) {
+        next(e);
+    }
+
+}

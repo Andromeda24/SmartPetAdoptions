@@ -8,7 +8,7 @@ export const newPet: RequestHandler<unknown, StandardResponse<Pet>
     try { 
             const new_pet = req.body;
     
-            if (!new_pet.name) throw new Error('Name is required');
+            if (!new_pet.name) throw new ErrorWithStatus('Name is required',403);
                 const results = await PetModel.create(req.body);
             const pet: Pet = {
                             _id: results._id,
@@ -30,13 +30,15 @@ export const newPet: RequestHandler<unknown, StandardResponse<Pet>
                     
 };
 
-export const updatePet: RequestHandler<{id:string}, StandardResponse<{ updated_documents:Number}>
+export const updatePet: RequestHandler<{petid:string}, StandardResponse<{ updated_documents:Number}>
             , Pet, unknown> = async (req, res, next) => {
     try {
         if (!req.file) {
             // update data
-            console.log(req.body);
-            const results = await PetModel.updateOne({_id: req.params.id}
+            if (Number(!req.params.petid)){
+                 new ErrorWithStatus('Id is required',403)
+            } 
+            const results = await PetModel.updateOne({_id: req.params.petid}
                 , {$set: {...req.body }}
             )
         
@@ -44,22 +46,37 @@ export const updatePet: RequestHandler<{id:string}, StandardResponse<{ updated_d
                 data: { updated_documents:results.modifiedCount}});
         
             } else {
-            // update Immage
+            // update Image
             const results = await PetModel.updateOne({_id: req.params.id}
                 , {$set: {image_path:req.file?.path }}
             )
         
             return res.status(200).json({success: true, 
                 data: { updated_documents:results.modifiedCount}});
-            }
-        } catch (err) {
-            next(err);
         }
+    } catch (err) {
+        next(err);
+    }
     
 };
 
-export const deletePet: RequestHandler<unknown, StandardResponse<Pet>
-            , Pet, unknown> = async (req, res, next) => {
+export const deletePet: RequestHandler<{petid:string}, StandardResponse<number>
+            , unknown, unknown> = async (req, res, next) => {
+    try { 
+        let query = {} 
+        let page = 0
+        
+        if (Number(!req.params.petid)){
+            new ErrorWithStatus('Id is required',403)
+        } 
+        const results = await PetModel
+            .deleteOne({_id:req.params.petid});
+        res.status(200).json({ success: true, data: results.deletedCount });
+
+    } catch (err) {
+        next(err);
+    }
+            
     
 };
 
