@@ -28,7 +28,7 @@ import { PetService } from './pet.service';
     <table mat-table [dataSource]="petsDataSource" matSort>
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-          <td mat-cell *matCellDef="let pet"> <a [routerLink]="['/pets', pet._id]">{{ pet.name }}  {{pet.breed}}</a> </td>
+          <td mat-cell *matCellDef="let pet"> <a [routerLink]="['/pets', pet._id]">{{ pet.name }}</a> </td>
         </ng-container>
         <ng-container matColumnDef="description">
           <th mat-header-cell *matHeaderCellDef> Description </th>
