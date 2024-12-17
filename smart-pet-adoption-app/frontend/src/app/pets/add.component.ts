@@ -183,15 +183,31 @@ export class AddComponent {
     const input = event.target as HTMLInputElement;
     if (input.files!.length) {
       this.#profile_picture = input.files![0];
-     // console.log('Profile path' + this.#profile_picture)
+      console.log('Profile path' + this.#profile_picture.name)
     }
   }
 
   go() {  
-    this.#petService.post_pet(this.form.value as Pet).subscribe(response => {
+
+    const formData = new FormData();
+    formData.append('_id', '');
+    formData.append('name', this.form.controls.name.value);
+    formData.append('kind', this.form.controls.kind.value);
+    formData.append('breed', this.form.controls.breed.value);
+    formData.append('age', this.form.controls.age.value.toString());
+    
+    formData.append('gender', this.form.controls.gender.value);
+    formData.append('description', this.form.controls.description.value);
+    formData.append('image_path', this.#profile_picture);
+    formData.append('sterilized', this.form.controls.sterilized.value.toString());
+    formData.append('ownerId', '');
+    
+      const petData = Object.fromEntries(formData) as unknown as Pet;
+      this.#petService.post_pet(petData).subscribe(response => {
       if (response.success) {
         this.#router.navigate(['', 'pets']);
       }
     });
   }
+
 }

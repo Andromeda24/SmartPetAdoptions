@@ -210,9 +210,10 @@ export class ListComponent {
 
   deletePet(petId: string) {
     if (confirm('Are you sure you want to delete this pet?')) {
+      console.log('petId in delete' + petId)
       this.#petService.delete_pet(petId).subscribe(
         () => {
-          this.loadPets(); // Refresh the pet list after deletion
+          this.loadPets(); 
         },
         (error) => {
           console.error('Error deleting pet:', error);
