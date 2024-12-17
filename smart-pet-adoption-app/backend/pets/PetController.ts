@@ -125,7 +125,7 @@ export const listPets: RequestHandler<{page: number, ownerId:string} , StandardR
         const results = await PetModel
             .find(query
                 ,{_id: 1, name:1,kind:1,breed:1,age:1,gender:1,
-                    description:1,sterilized:1,image_path:1,ownerid:1})
+                    description:1,sterilized:1,image_path:1,ownerId:1})
             .skip(page*PAGE_SIZE)
             .limit(PAGE_SIZE);
         res.status(201).json({ success: true, data: results });
