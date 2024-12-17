@@ -23,8 +23,8 @@ const uploadHelper = multer({ dest: 'pictures/'});
 PetRouter.get('/', listPets);
 PetRouter.get('/:page/:ownerId', listPets);
 PetRouter.get('/recommend', recommendPet);
-PetRouter.post('/', checkToken,  checkAdm, newPet);
-PetRouter.put('/picture/:petid',checkToken, checkAdm, uploadHelper.single('profile_picture') , updatePet);
+PetRouter.post('/', checkToken,  checkAdm, uploadHelper.single('image_path') ,newPet);
+PetRouter.put('/picture/:petid',checkToken, checkAdm, uploadHelper.single('picture_url') , updatePet);
 PetRouter.put('/:id',checkToken, checkAdm, updatePet);
 PetRouter.delete('/:petid',deletePet);
 

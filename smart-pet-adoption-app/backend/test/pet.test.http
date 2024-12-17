@@ -44,21 +44,17 @@ Content-Type: application/json
 
 
 ### recommend PET
-GET http://localhost:3000/pets/recommend
+GET http://localhost:3000/pets/recommend?kind=Dog&age=junior&preferences=cute
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVlNmMzZWRiNDMwYjQ1MmMwNzgwZWUiLCJuYW1lIjoiR3VkcnVtIiwiZW1haWwiOiJ2aXZhdG1hQHZpdmF0bWEub3JnIiwicm9sZSI6IlNoZWx0ZXJBZG1pbiIsImlhdCI6MTczNDM4MTc0NX0.iG4qSZxcKuZNPfbZW1Revtc-kDjftBs15Xf6kFbNg9s
 Content-Type: application/json
 
 
-{
-    "kind": "Dog",
-    "age": "junior",
-    "preferences":"cute"
-}  
+  
 
 
 ### delete pet
 DELETE http://localhost:3000/pets/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVjYzVkYTJlNzlhY2FlNGM3YmExMDMiLCJuYW1lIjoiR3VkcnVtIiwiZW1haWwiOiJ2aXZhdG1hQHZpdmF0bWEub3JnIiwiaWF0IjoxNzM0MTkzNTgxfQ.jVC5on5FM1v3DCGFkJBld7ya-s9zrkV04mSFyThAYkA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVlNmMzZWRiNDMwYjQ1MmMwNzgwZWUiLCJuYW1lIjoiR3VkcnVtIiwiZW1haWwiOiJ2aXZhdG1hQHZpdmF0bWEub3JnIiwicm9sZSI6IlNoZWx0ZXJBZG1pbiIsImlhdCI6MTczNDM4MTc0NX0.iG4qSZxcKuZNPfbZW1Revtc-kDjftBs15Xf6kFbNg9s
 Content-Type: application/json
 
 
@@ -74,7 +70,7 @@ Content-Type: application/json
 
 ### update picture
 PUT http://localhost:3000/pets/picture/675e6d5a4c01e2d57706a7d2
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVjYzVkYTJlNzlhY2FlNGM3YmExMDMiLCJuYW1lIjoiR3VkcnVtIiwiZW1haWwiOiJ2aXZhdG1hQHZpdmF0bWEub3JnIiwiaWF0IjoxNzM0MTkzNTgxfQ.jVC5on5FM1v3DCGFkJBld7ya-s9zrkV04mSFyThAYkA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVlNmMzZWRiNDMwYjQ1MmMwNzgwZWUiLCJuYW1lIjoiR3VkcnVtIiwiZW1haWwiOiJ2aXZhdG1hQHZpdmF0bWEub3JnIiwicm9sZSI6IlNoZWx0ZXJBZG1pbiIsImlhdCI6MTczNDM4MTc0NX0.iG4qSZxcKuZNPfbZW1Revtc-kDjftBs15Xf6kFbNg9s
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 
 

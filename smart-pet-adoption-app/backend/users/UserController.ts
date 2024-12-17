@@ -64,3 +64,27 @@ export const upload_picture: RequestHandler<unknown, StandardResponse<String>> =
         next(e);
     }
 };
+
+export const listUsers: RequestHandler<{ role?:string} , StandardResponse<User[]>
+            , unknown, unknown> = async (req, res, next) => {
+
+   try { 
+        let query = {} 
+        let page = 0
+        
+        if (req.params.role){
+            query  = {... query, role: req.params.role} ;
+        } 
+        console.log(query) ;
+        console.log(req.params ) ;
+        const results = await UserModel
+            .find(query
+                ,{_id: 1, name:1,email:1,role:1})
+        res.status(200).json({ success: true, data: results });
+
+    } catch (err) {
+        next(err);
+    }
+
+                     
+};

@@ -10,6 +10,8 @@ export const newPet: RequestHandler<unknown, StandardResponse<Pet>
             , Pet, unknown> = async (req, res, next) => {
     try { 
             const new_pet = req.body;
+            console.log(new_pet);
+            console.log(req.file)
     
             if (!new_pet.name) throw new Error('Name is required');
                 const results = await PetModel.create(req.body);
@@ -67,6 +69,7 @@ export const updatePet: RequestHandler<{petid:string}, StandardResponse<Pet>
         
         } else {
         // update Image
+            console.log(req.file);
             const results = await PetModel.findOneAndUpdate({_id: req.params.id}
                 , {$set: {image_path:req.file?.path }}
             )
