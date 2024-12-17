@@ -26,4 +26,8 @@ export class UsersService {
   get_user(user_id: string) {
     return this.#http.get<StandardResponse<number>>(environment.SERVER_URL + `users/${user_id}`);
   }
+
+  get_users(role : string) {
+      return this.#http.get<StandardResponse<User[]>>(environment.SERVER_URL + 'users/?&role='+role);
+  }
 }

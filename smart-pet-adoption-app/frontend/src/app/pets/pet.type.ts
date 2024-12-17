@@ -6,7 +6,7 @@ export type Pet = {
     age: number,
     gender:Gender,
     description: string,
-    image_path: string,
+    image_path: string| null,
     sterilized: boolean,
     ownerId : string | null,
 };
@@ -18,15 +18,18 @@ export enum Gender {
 
 
 export enum Kind{
+    Any ="Any Pet",  
     Dog = 'Dog',
     Cat = 'Cat',
-    Hamster ='Hamster',   
+    Hamster ='Hamster', 
+   
 }
 
 export enum AgeLevel{
+    Any ='Any Age',
     Junior = 'Junior',
     Middle = 'Middle',
-    Senior = 'Senior'
+    Senior = 'Senior',   
 }
 
 export type SearchData = {

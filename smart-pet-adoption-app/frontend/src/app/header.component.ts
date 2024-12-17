@@ -25,6 +25,7 @@ import { StateService } from './state.service';
                   </button> 
                   <ul class="dropdown-menu" [ngClass]="{'show': isDropdownOpen}"> 
                     <li  *ngIf="isAdmin()"><a class="dropdown-item" [routerLink]="['/pets/add']">Add New Pet</a></li>        
+                    <li  *ngIf="isAdmin()"><a class="dropdown-item" [routerLink]="['/pets/adopt']">Adopt Pet</a></li>    
                     <li><a class="dropdown-item" [routerLink]="['/pets/recommend']">Recommend</a></li> 
                   </ul> 
                 </div> 

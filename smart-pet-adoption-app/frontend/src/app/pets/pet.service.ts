@@ -33,6 +33,7 @@ export class PetService {
   }
 
   put_pet(pet: Pet) {
+    console.log('Pet id put'+pet._id)
     return this.#http.put<StandardResponse<number>>(environment.SERVER_URL + `pets/${pet._id}`, pet);
   }
 

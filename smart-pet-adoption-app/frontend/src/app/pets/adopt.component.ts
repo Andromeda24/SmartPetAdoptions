@@ -2,25 +2,27 @@ import { Component, inject,signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { PetService } from './pet.service';
-import { Pet,Gender } from './pet.type';
-import { Role } from '../users/user.type'
+import { Pet,Gender,Kind } from './pet.type';
+import { User,Role } from '../users/user.type'
 import { Router } from '@angular/router';
-import { Kind } from './pet.type';
-import { ViewChild } from '@angular/core';
 import { StateService } from '../state.service';
-
+import { UsersService } from '../users/users.service';
 
 @Component({
   selector: 'app-adopt',
   imports: [ReactiveFormsModule,CommonModule],
   template: `
-   <!-- <form [formGroup]="form" (ngSubmit)="go()" class="adopt-container">
-      <label for="gender">Gender :</label> 
-      <select id="gender" [formControl]="form.controls.gender">
-      <option *ngFor="let gender of genderOptions" [value]="gender">{{ gender }}</option>
+   <form [formGroup]="form" (ngSubmit)="adopt()" class="adopt-container">
+      <label for="petId">Pet Name :</label> 
+      <select id="petId" formControlName="petId">
+      <option *ngFor="let pet of pets()" [value]="pet._id">{{ pet.name }}</option>
+      </select>
+      <label for="userId">User Name :</label> 
+        <select id="userId" formControlName="userId">
+        <option *ngFor="let user of users()" [value]="user?._id">{{ user.name }}</option>
       </select>
       <button [disabled]="form.invalid">Adopt Pet</button>
-   </form> -->
+   </form>
   `,
   styles: [`
      .adopt-container {        
@@ -39,30 +41,42 @@ import { StateService } from '../state.service';
     `]
 })
 export class AdoptComponent {
- #state_service = inject(StateService);
+  #state_service = inject(StateService);
   #storedState = localStorage.getItem('SPA_APP_STATE');
- // @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
- // @ViewChild(MatSort, { static: false }) sort!: MatSort;
   #router = inject(Router);
   #petService = inject(PetService);
+  #userService = inject(UsersService);
   pets = signal<Pet[]>([]);
- // petsDataSource = new MatTableDataSource<Pet>([]);
+  users = signal<User[]>([]);
   displayedColumns: string[] = ['name', 'description','breed','actions'];
   user_role :string | null = null; 
   admin_role = Role.Admin.toLocaleLowerCase();  
+  petOptions: { value: string | null; label: string; }[] = [];
 
   constructor() {    
     this.loadPets();
- }
+       
+      }
+
+ form = inject(FormBuilder).nonNullable.group({
+  'petId': ['', Validators.required],
+  'userId': ['', Validators.required]     
+});
+
 
  loadPets(): void {
    if(this.isAdmin()){
      this.#petService.get_pets(10).subscribe(response => {
-       console.log("Pet Service  all" + JSON.stringify(response.data))
        if (response.success) {       
-         this.pets.set(response.data.filter(p => p.ownerId === null));       
+        this.pets.set(response.data);     
        }
      });      
+
+     this.#userService.get_users(Role.Seeker.toString()).subscribe(response => {
+      if (response.success) {
+        this.users.set(response.data)
+      }
+     });    
    }   
  }
 
@@ -75,7 +89,23 @@ export class AdoptComponent {
    return false;
  }
 
- adopt() {
-   this.#router.navigate(['', 'pets', 'add']);
- }
+adopt() {
+  console.log('edit Pet ****')
+  //userId: string,petId : string
+  let filteredPet: Pet | undefined = this.pets().find((pet) => pet._id === this.form.controls.petId.value);
+  if(typeof filteredPet!== 'undefined'){
+    filteredPet.ownerId = this.form.controls.userId.value;
+
+
+    
+  console.log('Updating Pet Filter Owner ID:'+filteredPet.ownerId);
+    this.#petService.put_pet(filteredPet).subscribe(response => {
+      if (response.success) {
+        this.#router.navigate(['', 'pets']); 
+      }
+    });
+  }  
+
+  //this.#router.navigate(['/pets/update/', petId]);
+}
 }

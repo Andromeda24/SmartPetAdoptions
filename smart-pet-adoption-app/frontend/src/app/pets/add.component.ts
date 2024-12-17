@@ -149,6 +149,10 @@ export class AddComponent {
         return; 
       }
 
+      if (this.form.controls.age.value === 0) {
+        this.form_error  = `Age should not be 0.`;
+        return; 
+      }
 
       if (this.form.controls.gender.errors?.['required']) {
         this.form_error = 'Gender is required.';
@@ -175,7 +179,7 @@ export class AddComponent {
     'age': [0, [Validators.required,Validators.pattern(/^\d+$/)]],
     'gender': [ Gender.Female, Validators.required],
     'description': ['', Validators.required],
-    'file': ['', Validators.required],
+    'file': [null, Validators.nullValidator],
     'sterilized': [false, Validators.required]
   });
 

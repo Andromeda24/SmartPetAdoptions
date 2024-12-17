@@ -1,4 +1,5 @@
 export type User = {
+  _id :string | null,
   name: string,
   email: string,
   password: string,

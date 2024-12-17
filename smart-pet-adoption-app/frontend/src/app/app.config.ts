@@ -27,6 +27,7 @@ export const appConfig: ApplicationConfig = {
       { path: 'signin', component: SigninComponent },     
       { path: 'about', loadComponent: () => import('./about.component').then(c => c.AboutComponent) },
       { path: 'signup', loadComponent: () => import('./users/signup.component').then(c => c.SignupComponent) },
+      { path: 'pets/adopt', loadComponent: () => import('./pets/adopt.component').then(c => c.AdoptComponent) },
       { path: 'pets/recommend', loadComponent: () => import('./pets/recommand.component').then(c => c.RecommandComponent) },
       {
         path: 'pets', loadChildren: () => import('./pets/pets.routes').then(r => r.pets_routes),
@@ -36,7 +37,7 @@ export const appConfig: ApplicationConfig = {
         path: 'pets/:id',loadComponent: () => import('./pets/detail.component').then(c => c.PetDetailComponent),
       }, { path: 'pets/add', loadComponent: () => import('./pets/add.component').then(c => c.AddComponent) }
        , { path: 'pets/update/:id', loadComponent: () => import('./pets/update.component').then(c => c.UpdateComponent)}
-   
+      
     ]), provideAnimationsAsync(), provideAnimationsAsync()
   ]
 };

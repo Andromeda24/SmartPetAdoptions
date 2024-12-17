@@ -25,15 +25,15 @@ import { response } from 'express';
    <form [formGroup]="form">
    <div class="container">
     <div class="row">      
-      <label for="kind" class="col-sm mt-2">Kind of pet :</label>
+      <label for="kind" class="col-sm-1 mt-3">Kind of pet :</label>
       <select id="kind" [formControl]="form.controls.kind" class="col-sm">
       <option *ngFor="let kind of kindOptions" [value]="kind">{{ kind }}</option>
       </select>
-      <label for="age" class="col-sm mt-2">Age :</label>
+      <label for="age" class="col-sm-1 mt-3">Age :</label>
       <select id="age" [formControl]="form.controls.age" class="col-sm">
       <option *ngFor="let age of ageOptions" [value]="age">{{ age }}</option>
       </select>
-      <input type='textarea' placeholder="Your Preferences ..." [formControl]="form.controls.preference" class="col-sm-4"/>
+      <textarea  placeholder="Your Preferences ..." [formControl]="form.controls.preference" class="col-sm-6 mt-3"></textarea>
       <button class="col-sm" (click)="onSearch()"> Ask AI </button>
       </div>
     </div>
@@ -56,10 +56,10 @@ import { response } from 'express';
           <th mat-header-cell *matHeaderCellDef> Breed </th>
           <td mat-cell *matCellDef="let pet"> {{ pet.breed }} </td>
         </ng-container>
-        <ng-container matColumnDef="image_path">
+        <!-- <ng-container matColumnDef="image_path">
           <th mat-header-cell *matHeaderCellDef> Image Path </th>
           <td mat-cell *matCellDef="let pet"> {{ pet.image_path }} </td>
-        </ng-container>
+        </ng-container> -->
         <tr mat-header-row *matHeaderRowDef="displayedColumns" mat-sort-header></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
@@ -69,7 +69,7 @@ import { response } from 'express';
   `,
   styles: [`
    .recommad-container{            
-        width: 60%;
+        width: 80%;
         margin: 20px auto;
         padding: 20px 30px 20px 20px;
         background-color: #fff;
@@ -79,7 +79,7 @@ import { response } from 'express';
        }
 
        .list-container{            
-        width: 60%;
+        width: 80%;
         margin: 20px auto;
         padding: 20px 30px 20px 20px;
         background-color: #fff;
@@ -104,10 +104,10 @@ export class RecommandComponent {
   #petTestService = inject(PetTestService);
   pets = signal<Pet[]>([]);
   petsDataSource = new MatTableDataSource<Pet>([]);
-  displayedColumns: string[] = ['name', 'description','breed','image_path'];
+  displayedColumns: string[] = ['name', 'description','breed'];
 
   constructor(private petService: PetService) { 
-    this.loadPets();
+  //  this.loadPets();
   }
     form = inject(FormBuilder).nonNullable.group({
       '_id': ['', Validators.required],     
@@ -121,8 +121,7 @@ export class RecommandComponent {
 
   loadPets(): void {
     this.#petService.get_pets().subscribe(response => {
-     // console.log("Pet  Service " + JSON.stringify(response.data))
-      if (response.success) {
+        if (response.success) {
         this.pets.set(response.data);
         this.petsDataSource.data = response.data;
       }
@@ -158,7 +157,7 @@ export class RecommandComponent {
             
 
       this.#petService.recommand_pet(searchData).subscribe(response => {
-        console.log("recommand_pet" + JSON.stringify(response.data))
+    //    console.log("recommand_pet" + JSON.stringify(response.data))
         if (response.success) {
           this.pets.set(response.data);
           this.petsDataSource.data = response.data;
