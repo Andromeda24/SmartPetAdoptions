@@ -5,7 +5,7 @@ import OpenAI from "openai";
 const openai = new OpenAI();
 
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 100;
 export const newPet: RequestHandler<unknown, StandardResponse<Pet>
             , Pet, unknown> = async (req, res, next) => {
     try { 
@@ -115,7 +115,7 @@ export const listPets: RequestHandler<{page: number, ownerId:string} , StandardR
         if (req.params.ownerId){
             query  = {... query, ownerId: req.params.ownerId} ;
         } else {
-            query  = {... query, ownerId:""} ; 
+            query  = {... query} ; 
         } 
         if (Number(req.params.page)){
             page=Number(req.params.page)-1;
@@ -125,7 +125,7 @@ export const listPets: RequestHandler<{page: number, ownerId:string} , StandardR
         const results = await PetModel
             .find(query
                 ,{_id: 1, name:1,kind:1,breed:1,age:1,gender:1,
-                    description:1,sterilized:1,image_path:1})
+                    description:1,sterilized:1,image_path:1,ownerid:1})
             .skip(page*PAGE_SIZE)
             .limit(PAGE_SIZE);
         res.status(201).json({ success: true, data: results });
