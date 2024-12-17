@@ -5,7 +5,7 @@ const userSchema = new Schema({
     name: { type: String, required:true },
     email: { type: String, unique: true, required:true },
     password: String,
-    role: { type: String, enum : ['ShelterAdmin','PetSeeker'], default:'PetSeeket'},
+    role: { type: String, enum : ['ShelterAdmin','PetSeeker'], default:'PetSeeker'},
     address: String ,
     phone: String,
     profile_picture:String,

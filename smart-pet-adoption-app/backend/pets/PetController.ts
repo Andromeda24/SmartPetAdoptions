@@ -10,13 +10,9 @@ export const newPet: RequestHandler<unknown, StandardResponse<Pet>
             , Pet, unknown> = async (req, res, next) => {
     try { 
             const new_pet = req.body;
-            if (!new_pet.name) throw new ErrorWithStatus('Name is required',403);
-            if (!new_pet.age) throw new ErrorWithStatus('Age is required',403);
-            if (!new_pet.kind) throw new ErrorWithStatus('Kind is required',403);
-              
-            const results = await PetModel.create(new_pet);
-            //asyncronous update AI Embeded description
-            const embedding = generatePetEmbeding(results);
+    
+            if (!new_pet.name) throw new Error('Name is required');
+                const results = await PetModel.create(req.body);
             const pet: Pet = {
                             _id: results._id,
                             name: results.name,

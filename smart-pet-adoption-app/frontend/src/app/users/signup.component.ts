@@ -30,9 +30,6 @@ import { environment } from '../../environments/environment.development';
       <input placeholder="address" [formControl]="form.controls.address"/> 
       <label for="phone">Phone :</label>
       <input placeholder="phone" [formControl]="form.controls.phone"/>      
-      <!-- <label for="file">Profile Picture :</label>
-      <input type="file" [formControl]="form.controls.file" (change)="pickup_file($event)"/>      -->
-      
       <button [disabled]="form.invalid">Create Account</button>
       <div class="error" style="grid-column: 2;">         
             {{this.form_error}}

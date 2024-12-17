@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { Pet } from './pet.type';
+import { AgeLevel, Pet } from './pet.type';
+import { Kind } from './pet.type';
 
 export interface StandardResponse<T> {
   success: boolean;
@@ -31,7 +32,7 @@ export class PetService {
     return this.#http.delete<StandardResponse<number>>(environment.SERVER_URL + `pets/${pet_id}`);
   }
 
-  recommand_pet(searchQuery :string){
-    return this.#http.post<StandardResponse<Pet>>(environment.SERVER_URL + 'pets/recommand', searchQuery);
+  recommand_pet(kind:Kind,age : AgeLevel, preferences_text :string){
+    return this.#http.post<StandardResponse<Pet>>(environment.SERVER_URL + 'pets/recommand', preferences_text);
   }
 }

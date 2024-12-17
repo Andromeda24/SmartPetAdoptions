@@ -40,7 +40,6 @@ import { Router, ActivatedRoute } from '@angular/router';
       <label for="sterilized">Sterilized :</label> 
       <input placeholder="sterilized"  type="checkbox" [formControl]="form.controls.sterilized"/>
       <button [disabled]="form.invalid">Update Pet</button>
-
       <div class="error" style="grid-column: 2;">         
             {{this.form_error}}
        </div>

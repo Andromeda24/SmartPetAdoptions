@@ -2,21 +2,24 @@ POST http://localhost:3000/users/signup
 Content-Type: application/json
 
 {
-    "name": "Gudrum", 
-    "email": "vivatma@vivatma.org",
-    "password": "123456",
-    "role": "ShelterAdmin",
-    "address": "1407 Red road Coral Gables, Fl",
-    "phone": "945-1234567"
+"name":"Margret Ang",
+"email":"mga@miu.edu",
+"password":"ddd",
+"role":"PetSeeker",
+"address":"1000 North 4th Street Fairfield, Iowa",
+"phone":"16412332028"
 }
+
+
+
 
 ###
 POST http://localhost:3000/users/login
 Content-Type: application/json
 
 {
-    "email": "vivatma@vivatma.org",
-    "password": "123456"
+    "email": "gg@miu.edu",
+    "password": "sss"
 }
 
 ###

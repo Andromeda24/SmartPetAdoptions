@@ -17,20 +17,19 @@ import { StateService } from './state.service';
             <ul class="nav-list"> 
               <li><a routerLink="/">Home</a></li>   
               <li><a [routerLink]="['/about']">About</a></li>     
-              <ng-container *ngIf="isAdmin()"> 
+              <ng-container> 
               <li class="dropdown"> 
                 <div class="dropdown" [ngClass]="{'show': isDropdownOpen}"> 
                   <button class="btn dropdown-toggle" type="button" (click)="toggleDropdown()"> 
                     Manage Pet Info 
                   </button> 
                   <ul class="dropdown-menu" [ngClass]="{'show': isDropdownOpen}"> 
-                    <li><a class="dropdown-item" [routerLink]="['/pets/add']">Add New Pet</a></li>        
+                    <li  *ngIf="isAdmin()"><a class="dropdown-item" [routerLink]="['/pets/add']">Add New Pet</a></li>        
                     <li><a class="dropdown-item" [routerLink]="['/pets/recommend']">Recommend</a></li> 
                   </ul> 
                 </div> 
               </li> 
-              </ng-container>
-            
+              </ng-container>            
             </ul>   
         </nav> 
       </header>

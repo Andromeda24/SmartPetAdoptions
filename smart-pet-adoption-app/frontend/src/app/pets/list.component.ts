@@ -137,6 +137,8 @@ export class ListComponent {
   displayedColumns: string[] = ['name', 'description','breed','actions'];
   user_role :string | null = null; 
   admin_role = Role.Admin.toLocaleLowerCase();
+  
+
   constructor() {    
     // this.#petService.get_pets().subscribe(response => {
     //   if (response.success) this.pets.set(response.data);
@@ -154,11 +156,11 @@ export class ListComponent {
     });  
   }
 
+ 
   isAdmin(): boolean {
     if (this.#storedState) {
       const parsedState = JSON.parse(this.#storedState);
-      const user_role = parsedState.role.toLocaleLowerCase().trim();
-      console.log('User role stored state  haha *****'+user_role)
+      const user_role = parsedState.role.toLocaleLowerCase().trim();     
       return user_role === this.admin_role;
     }
     return false;

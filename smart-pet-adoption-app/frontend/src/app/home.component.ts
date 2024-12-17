@@ -7,8 +7,7 @@ import {initial_state, StateService } from './state.service';
   imports: [RouterModule],
   template: `     
      <div class="homepage-container">
-     <h1> Welcome to Smart Pet Adoption!</h1>
-     
+     <h1> Welcome to Smart Pet Adoption!</h1>     
       <div class="right-align">
         <a routerLink="/signin">Sign in here!</a>
       </div>

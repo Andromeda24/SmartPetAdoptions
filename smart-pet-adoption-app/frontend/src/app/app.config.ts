@@ -27,7 +27,7 @@ export const appConfig: ApplicationConfig = {
       { path: 'signin', component: SigninComponent },     
       { path: 'about', loadComponent: () => import('./about.component').then(c => c.AboutComponent) },
       { path: 'signup', loadComponent: () => import('./users/signup.component').then(c => c.SignupComponent) },
-      { path: 'pets/recommend', loadComponent: () => import('./pets/ai-recommand.component').then(c => c.AiRecommandComponent) },
+      { path: 'pets/recommend', loadComponent: () => import('./pets/recommand.component').then(c => c.RecommandComponent) },
       {
         path: 'pets', loadChildren: () => import('./pets/pets.routes').then(r => r.pets_routes),
         canActivate: [() => inject(StateService).isLoggedIn()]  

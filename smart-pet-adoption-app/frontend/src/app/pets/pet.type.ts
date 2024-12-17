@@ -22,3 +22,9 @@ export enum Kind{
     Puppy ='Puppy',
     Doggy = 'Doggy'
 }
+
+export enum AgeLevel{
+    Junior = 'Junior',
+    Middle = 'Middle',
+    Senior = 'Senior'
+}

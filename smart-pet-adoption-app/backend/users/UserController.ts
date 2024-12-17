@@ -8,6 +8,7 @@ export const signin: RequestHandler<unknown, StandardResponse<{ token: string; }
     try {
         
         const { email, password } = req.body;
+        console.log('email ' +email)
         const user = await UserModel.findOne({ email });
         if (!user) throw new ErrorWithStatus('User not found', 404);
 
@@ -34,6 +35,7 @@ export const signup: RequestHandler<unknown, StandardResponse<string>, User, unk
     try { 
         const new_user = req.body;
 
+        console.log(" new_user  ***" +JSON.stringify(new_user))
         if (!new_user.password) throw new Error('Password is required');
         const hashed_password = await hash(new_user.password, 10);
 
