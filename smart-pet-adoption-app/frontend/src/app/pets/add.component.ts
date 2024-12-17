@@ -190,7 +190,6 @@ export class AddComponent {
   go() {  
 
     const formData = new FormData();
-    formData.append('_id', '');
     formData.append('name', this.form.controls.name.value);
     formData.append('kind', this.form.controls.kind.value);
     formData.append('breed', this.form.controls.breed.value);
@@ -204,6 +203,7 @@ export class AddComponent {
     
     //  const petData = Object.fromEntries(formData) as unknown as Pet;
       this.#petService.post_pet(formData).subscribe(response => {
+        console.log(" Pet Response "+ JSON.stringify(response))
       if (response.success) {
         this.#router.navigate(['', 'pets']);
       }

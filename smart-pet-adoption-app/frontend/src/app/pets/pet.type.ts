@@ -1,5 +1,5 @@
 export type Pet = {
-    _id: string,
+    _id: string | null,
     name : string,
     kind: Kind,
     breed: string ,    
