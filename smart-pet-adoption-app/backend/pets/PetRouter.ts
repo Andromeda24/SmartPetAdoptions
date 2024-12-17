@@ -6,25 +6,27 @@ import { listPets, newPet,updatePet,deletePet, recommendPet } from './PetControl
 const PetRouter = Router();
 // Middleware
 
-//const uploadHelper = require('multer');
+//const uploadHelper = multer({ dest: 'pictures/'});
 
 const storage = multer.diskStorage({
-    destination: function(req, file, callback) {
-      callback(null, '/my-images');
-    },
-    filename: function (req, file, callback) {
-      callback(null, file.fieldname);
-    }
-  });
+  destination: function (req, file, cb) {
+    cb(null, './pictures')
+  },
+  filename: function (req, file, cb) {
+    console.log(file);
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1000)
+    cb(null, file.fieldname + '-' + uniqueSuffix  )
+  }
+})
 
-const uploadHelper = multer({ dest: 'pictures/'});
-//const uploadHelper = multer(storage);
+const uploadHelper = multer({ storage: storage })
+
 
 PetRouter.get('/', listPets);
 PetRouter.get('/:page/:ownerId', listPets);
 PetRouter.get('/recommend', recommendPet);
 PetRouter.post('/', checkToken,  checkAdm, uploadHelper.single('image_path') ,newPet);
-PetRouter.put('/picture/:petid',checkToken, checkAdm, uploadHelper.single('picture_url') , updatePet);
+PetRouter.put('/picture/:petid',checkToken, checkAdm, uploadHelper.single('image_path') , updatePet);
 PetRouter.put('/:id',checkToken, checkAdm, updatePet);
 PetRouter.delete('/:petid',deletePet);
 

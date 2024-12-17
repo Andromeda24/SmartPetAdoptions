@@ -11,9 +11,11 @@ export const newPet: RequestHandler<unknown, StandardResponse<Pet>
     try { 
             const new_pet = req.body;
             console.log(new_pet);
-            console.log(req.file)
+            console.log(req.file);
+            console.log(req.headers);
+            console.log(req.body);
     
-            if (!new_pet.name) throw new Error('Name is required');
+            /*if (!new_pet.name) throw new Error('Name is required');
                 const results = await PetModel.create(req.body);
             const pet: Pet = {
                             _id: results._id,
@@ -24,10 +26,19 @@ export const newPet: RequestHandler<unknown, StandardResponse<Pet>
                             gender: results.gender,
                             description: results.description,
                             sterilized: results.sterilized,
-                            image_path: results.image_path,
+                            image_path: req.file.path!,
             }
             res.status(201).json({ success: true, data: pet });
-    
+            */
+            res.status(201).json({ success: true, data: {
+                "name": "Tonya",
+                "kind": "Dog",
+                "breed": "crossbreed",
+                "age": "6",
+                "gender":"Female",
+                "description": "",
+                "sterilized": "true"
+            } });
         } catch (err) {
             next(err);
         }

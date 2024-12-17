@@ -24,5 +24,6 @@ export const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
         res.status(error.status).json({ error: error.message });
     } else {
         res.status(500).json({ error: error.message });
+        console.log (error);
     }
 };
