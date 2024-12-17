@@ -8,7 +8,7 @@ export const signin: RequestHandler<unknown, StandardResponse<{ token: string; }
     try {
         
         const { email, password } = req.body;
-        console.log('email ' +email)
+        console.log(req.body)
         const user = await UserModel.findOne({ email });
         if (!user) throw new ErrorWithStatus('User not found', 404);
 

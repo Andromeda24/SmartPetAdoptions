@@ -9,14 +9,20 @@ const PAGE_SIZE = 5;
 export const newPet: RequestHandler<unknown, StandardResponse<Pet>
             , Pet, unknown> = async (req, res, next) => {
     try { 
-            const new_pet = req.body;
-            console.log(new_pet);
+
+
             console.log(req.file);
             console.log(req.headers);
             console.log(req.body);
     
-            /*if (!new_pet.name) throw new Error('Name is required');
-                const results = await PetModel.create(req.body);
+            if (!req.body.name) 
+                throw new ErrorWithStatus('Name is required',403);
+            let new_pet = req.body;         
+
+            if (req.file){
+                new_pet = {...new_pet, image_path:req.file.path}
+            }         
+            const results = await PetModel.create(new_pet);
             const pet: Pet = {
                             _id: results._id,
                             name: results.name,
@@ -26,19 +32,12 @@ export const newPet: RequestHandler<unknown, StandardResponse<Pet>
                             gender: results.gender,
                             description: results.description,
                             sterilized: results.sterilized,
-                            image_path: req.file.path!,
+                            image_path: results.image_path!,
             }
             res.status(201).json({ success: true, data: pet });
-            */
-            res.status(201).json({ success: true, data: {
-                "name": "Tonya",
-                "kind": "Dog",
-                "breed": "crossbreed",
-                "age": "6",
-                "gender":"Female",
-                "description": "",
-                "sterilized": "true"
-            } });
+            // asyng update embeddings
+            generatePetEmbeding(pet);
+            
         } catch (err) {
             next(err);
         }
@@ -49,56 +48,36 @@ export const newPet: RequestHandler<unknown, StandardResponse<Pet>
 export const updatePet: RequestHandler<{petid:string}, StandardResponse<Pet>
             , Pet, unknown> = async (req, res, next) => {
     try {
-        if (!req.file) {
-            // update data
-            if (Number(!req.params.petid)){
-                 new ErrorWithStatus('Id is required',403)
-            } 
-            const results = await PetModel.findOneAndUpdate({_id: req.params.petid}
-                , {$set: {...req.body}}
-                , { returnNewDocument: true }
-            )
-            if (results){ 
-                const pet: Pet = {
-                    _id: results._id,
-                    name: results.name,
-                    kind: results.kind,
-                    breed: results.breed,
-                    age: results.age,
-                    gender: results.gender,
-                    description: results.description,
-                    sterilized: results.sterilized,
-                    image_path: results.image_path,
-                };
-                generatePetEmbeding(pet);
-                return res.status(200).json({success: true, 
-                    data: pet});
-            } else {
-                throw new ErrorWithStatus ('No pet updated',500);
-            }
-            
-        
+        let updateImage = {}
+        if (req.file) {
+            updateImage = {image_path:req.file.path };
+        }  
+
+        if (Number(!req.params.petid)){
+                throw new ErrorWithStatus('Id is required',403)
+        } 
+
+        const results = await PetModel.findOneAndUpdate({_id: req.params.petid}
+            , {$set: {...req.body, ...updateImage}}
+            , { returnNewDocument: true }
+        )
+        if (results){ 
+            const pet: Pet = {
+                _id: results._id,
+                name: results.name,
+                kind: results.kind,
+                breed: results.breed,
+                age: results.age,
+                gender: results.gender,
+                description: results.description,
+                sterilized: results.sterilized,
+                image_path: results.image_path,
+            };
+            generatePetEmbeding(pet);
+            return res.status(200).json({success: true, 
+                data: pet});
         } else {
-        // update Image
-            console.log(req.file);
-            const results = await PetModel.findOneAndUpdate({_id: req.params.id}
-                , {$set: {image_path:req.file?.path }}
-            )
-            if (results){ 
-                const pet: Pet = {
-                    _id: results._id,
-                    name: results.name,
-                    kind: results.kind,
-                    breed: results.breed,
-                    age: results.age,
-                    gender: results.gender,
-                    description: results.description,
-                    sterilized: results.sterilized,
-                    image_path: results.image_path,
-                };
-                return res.status(200).json({success: true, 
-                    data: pet});
-            }
+            throw new ErrorWithStatus ('No pet updated',500);
         }
     } catch (err) {
         next(err);
@@ -167,7 +146,7 @@ async function generatePetEmbeding(pet: Pet){
     PetModel.updateOne({_id: pet._id}
         , {$set: { embeddedDescription: embedding }}
     ).then(res => 
-        console.log( res)
+        console.log( 'emeddings updated ' + pet._id)
     ).catch(error=>console.log(error));
 }
 
@@ -178,9 +157,9 @@ async function generateEmbedding(input: string):Promise<number[]> {
     model: 'text-embedding-3-small',
     input 
     });
-     console.log({
-     dimensions: vectorEmbedding.data[0].embedding.length, // 1536 dimentions
-     });
+     //console.log({
+     //dimensions: vectorEmbedding.data[0].embedding.length, // 1536 dimentions
+     //});
     return vectorEmbedding.data[0].embedding;
 }
 

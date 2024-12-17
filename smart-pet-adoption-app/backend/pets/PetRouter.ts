@@ -14,8 +14,8 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     console.log(file);
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1000)
-    cb(null, file.fieldname + '-' + uniqueSuffix  )
+    const uniqueSuffix = Date.now()  + Math.round(Math.random() * 1000)
+    cb(null, file.fieldname + uniqueSuffix + file.originalname  )
   }
 })
 
@@ -25,8 +25,8 @@ const uploadHelper = multer({ storage: storage })
 PetRouter.get('/', listPets);
 PetRouter.get('/:page/:ownerId', listPets);
 PetRouter.get('/recommend', recommendPet);
-PetRouter.post('/', checkToken,  checkAdm, uploadHelper.single('image_path') ,newPet);
-PetRouter.put('/picture/:petid',checkToken, checkAdm, uploadHelper.single('image_path') , updatePet);
+PetRouter.post('/', checkToken,  checkAdm, uploadHelper.single('profile_picture') ,newPet);
+PetRouter.put('/picture/:petid',checkToken, checkAdm, uploadHelper.single('profile_picture') , updatePet);
 PetRouter.put('/:id',checkToken, checkAdm, updatePet);
 PetRouter.delete('/:petid',deletePet);
 
