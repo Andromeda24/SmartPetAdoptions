@@ -28,8 +28,13 @@ export class PetService {
     return this.#http.get<StandardResponse<Pet>>(environment.SERVER_URL + `pets/${pet_id}`);
   }
 
-  post_pet(pet: Pet) {
-    return this.#http.post<StandardResponse<Pet>>(environment.SERVER_URL + 'pets/', pet);
+  // post_pet(pet: Pet) {
+  //   return this.#http.post<StandardResponse<Pet>>(environment.SERVER_URL + 'pets/', pet);
+  // }
+
+  post_pet(data: FormData) {  
+    const formDataObject = Object.fromEntries(data.entries());   
+    return this.#http.post<{ success: boolean, data: string; }>(environment.SERVER_URL + 'pets/', formDataObject);
   }
 
   put_pet(pet: Pet) {

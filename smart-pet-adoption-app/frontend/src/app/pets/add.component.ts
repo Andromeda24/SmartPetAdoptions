@@ -39,7 +39,7 @@ import { Kind } from './pet.type';
       <label for="description">Description :</label> 
       <input placeholder="description" [formControl]="form.controls.description"/>
       <label for="file">Profile Picture :</label>
-      <input type="file" [formControl]="form.controls.image_path" (change)="pickup_file($event)"/>  
+      <input type="file" [formControl]="form.controls.file" (change)="pickup_file($event)"/>
       <label for="sterilized">Sterilized :</label> 
       <input placeholder="sterilized"  type="checkbox" [formControl]="form.controls.sterilized"/>
       <button [disabled]="form.invalid">Create Pet</button>
@@ -175,7 +175,7 @@ export class AddComponent {
     'age': [0, [Validators.required,Validators.pattern(/^\d+$/)]],
     'gender': [ Gender.Female, Validators.required],
     'description': ['', Validators.required],
-    'image_path': ['', Validators.required],
+    'file': ['', Validators.required],
     'sterilized': [false, Validators.required]
   });
 
@@ -198,16 +198,15 @@ export class AddComponent {
     
     formData.append('gender', this.form.controls.gender.value);
     formData.append('description', this.form.controls.description.value);
-    formData.append('image_path', this.#profile_picture);
+    formData.append('profile_picture', this.#profile_picture);
     formData.append('sterilized', this.form.controls.sterilized.value.toString());
     formData.append('ownerId', '');
     
-      const petData = Object.fromEntries(formData) as unknown as Pet;
-      this.#petService.post_pet(petData).subscribe(response => {
+    //  const petData = Object.fromEntries(formData) as unknown as Pet;
+      this.#petService.post_pet(formData).subscribe(response => {
       if (response.success) {
         this.#router.navigate(['', 'pets']);
       }
     });
   }
-
 }

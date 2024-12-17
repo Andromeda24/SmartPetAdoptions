@@ -8,7 +8,7 @@ export type Pet = {
     description: string,
     image_path: string,
     sterilized: boolean,
-    ownerId : string,
+    ownerId : string | null,
 };
 
 export enum Gender {
@@ -29,7 +29,7 @@ export enum AgeLevel{
     Senior = 'Senior'
 }
 
-export type SearchData ={
+export type SearchData = {
     kind : string,
     age : string,
     preferences : string,
