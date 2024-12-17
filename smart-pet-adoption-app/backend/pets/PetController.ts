@@ -175,11 +175,11 @@ async function generateEmbedding(input: string):Promise<number[]> {
 }
 
 export const recommendPet: RequestHandler<unknown , StandardResponse<Pet[]>
-            , {kind: string, age:string , preferences:string, userid?:string}, unknown> = async (req, res, next) => {
+            ,unknown,  {kind: string, age:string , preferences:string, userid?:string}> = async (req, res, next) => {
 
    try { 
         let text = '' ;
-        const { kind, age, preferences } = req.body;
+        const { kind, age, preferences } = req.query;
         if (kind && age){
             text  = text + ' I am looking for a ' + age + ' ' + kind + '.' 
         } 

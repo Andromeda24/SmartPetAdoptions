@@ -22,7 +22,7 @@ const uploadHelper = multer({ dest: 'pictures/'});
 
 PetRouter.get('/', listPets);
 PetRouter.get('/:page/:ownerId', listPets);
-PetRouter.post('/recommend', recommendPet);
+PetRouter.get('/recommend', recommendPet);
 PetRouter.post('/', checkToken,  checkAdm, newPet);
 PetRouter.put('/picture/:petid',checkToken, checkAdm, uploadHelper.single('profile_picture') , updatePet);
 PetRouter.put('/:id',checkToken, checkAdm, updatePet);
