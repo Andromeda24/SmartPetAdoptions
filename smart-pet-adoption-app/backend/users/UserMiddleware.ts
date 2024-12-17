@@ -12,6 +12,7 @@ export const checkToken: RequestHandler = async (req, res, next) => {
 
         const decoded = verify(token, process.env.SECRET) as Token;
         req.user = decoded;
+        console.log( decoded);
         next();
 
     } catch (e) {

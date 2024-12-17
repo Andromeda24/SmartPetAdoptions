@@ -18,7 +18,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVjYzVkY
 ### adopt pet
 PUT http://localhost:3000/pets/675ef4377fb9124b38010131
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVjYzVkYTJlNzlhY2FlNGM3YmExMDMiLCJuYW1lIjoiR3VkcnVtIiwiZW1haWwiOiJ2aXZhdG1hQHZpdmF0bWEub3JnIiwiaWF0IjoxNzM0MTkzNTgxfQ.jVC5on5FM1v3DCGFkJBld7ya-s9zrkV04mSFyThAYkA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVlNmMzZWRiNDMwYjQ1MmMwNzgwZWUiLCJuYW1lIjoiR3VkcnVtIiwiZW1haWwiOiJ2aXZhdG1hQHZpdmF0bWEub3JnIiwicm9sZSI6IlNoZWx0ZXJBZG1pbiIsImlhdCI6MTczNDM4MTc0NX0.iG4qSZxcKuZNPfbZW1Revtc-kDjftBs15Xf6kFbNg9s
 
 {
     "ownerId": "432432543254",
@@ -29,7 +29,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVjYzVkY
 
 ### update pet
 PUT http://localhost:3000/pets/picture/675e6d5a4c01e2d57706a7d2
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVjYzVkYTJlNzlhY2FlNGM3YmExMDMiLCJuYW1lIjoiR3VkcnVtIiwiZW1haWwiOiJ2aXZhdG1hQHZpdmF0bWEub3JnIiwiaWF0IjoxNzM0MTkzNTgxfQ.jVC5on5FM1v3DCGFkJBld7ya-s9zrkV04mSFyThAYkA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVlNmMzZWRiNDMwYjQ1MmMwNzgwZWUiLCJuYW1lIjoiR3VkcnVtIiwiZW1haWwiOiJ2aXZhdG1hQHZpdmF0bWEub3JnIiwicm9sZSI6IlNoZWx0ZXJBZG1pbiIsImlhdCI6MTczNDM4MTc0NX0.iG4qSZxcKuZNPfbZW1Revtc-kDjftBs15Xf6kFbNg9s
 Content-Type: application/json
 
 {
@@ -43,8 +43,21 @@ Content-Type: application/json
 }
 
 
+### recommend PET
+POST http://localhost:3000/pets/recommend
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVlNmMzZWRiNDMwYjQ1MmMwNzgwZWUiLCJuYW1lIjoiR3VkcnVtIiwiZW1haWwiOiJ2aXZhdG1hQHZpdmF0bWEub3JnIiwicm9sZSI6IlNoZWx0ZXJBZG1pbiIsImlhdCI6MTczNDM4MTc0NX0.iG4qSZxcKuZNPfbZW1Revtc-kDjftBs15Xf6kFbNg9s
+Content-Type: application/json
+
+
+{
+    "kind": "Dog",
+    "age": "junior",
+    "preferences":"cute"
+}  
+
+
 ### delete pet
-DELETE http://localhost:3000/pets/675fb79ee09a04a85c8902e7
+DELETE http://localhost:3000/pets/
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVjYzVkYTJlNzlhY2FlNGM3YmExMDMiLCJuYW1lIjoiR3VkcnVtIiwiZW1haWwiOiJ2aXZhdG1hQHZpdmF0bWEub3JnIiwiaWF0IjoxNzM0MTkzNTgxfQ.jVC5on5FM1v3DCGFkJBld7ya-s9zrkV04mSFyThAYkA
 Content-Type: application/json
 
@@ -173,7 +186,7 @@ Content-Type: image/jpeg
 ### Egon 675f01126aa4280c116e1073
 POST http://localhost:3000/pets
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVjYzVkYTJlNzlhY2FlNGM3YmExMDMiLCJuYW1lIjoiR3VkcnVtIiwiZW1haWwiOiJ2aXZhdG1hQHZpdmF0bWEub3JnIiwiaWF0IjoxNzM0MTkzNTgxfQ.jVC5on5FM1v3DCGFkJBld7ya-s9zrkV04mSFyThAYkA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVlNmMzZWRiNDMwYjQ1MmMwNzgwZWUiLCJuYW1lIjoiR3VkcnVtIiwiZW1haWwiOiJ2aXZhdG1hQHZpdmF0bWEub3JnIiwicm9sZSI6IlNoZWx0ZXJBZG1pbiIsImlhdCI6MTczNDM4MTc0NX0.iG4qSZxcKuZNPfbZW1Revtc-kDjftBs15Xf6kFbNg9s
 
 {
     "name": "Egon",
@@ -188,7 +201,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVjYzVkY
 ### Nonna 675f01126aa4280c116e1073
 POST http://localhost:3000/pets
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVjYzVkYTJlNzlhY2FlNGM3YmExMDMiLCJuYW1lIjoiR3VkcnVtIiwiZW1haWwiOiJ2aXZhdG1hQHZpdmF0bWEub3JnIiwiaWF0IjoxNzM0MTkzNTgxfQ.jVC5on5FM1v3DCGFkJBld7ya-s9zrkV04mSFyThAYkA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVlNmMzZWRiNDMwYjQ1MmMwNzgwZWUiLCJuYW1lIjoiR3VkcnVtIiwiZW1haWwiOiJ2aXZhdG1hQHZpdmF0bWEub3JnIiwicm9sZSI6IlNoZWx0ZXJBZG1pbiIsImlhdCI6MTczNDM4MTc0NX0.iG4qSZxcKuZNPfbZW1Revtc-kDjftBs15Xf6kFbNg9s
 
 {
     "name": "Nonna",

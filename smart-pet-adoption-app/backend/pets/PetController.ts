@@ -1,15 +1,22 @@
 import { RequestHandler } from "express";
 import { ErrorWithStatus, StandardResponse } from "../common.ts";
 import { Pet, PetModel} from "./PetModel.ts";
+import OpenAI from "openai";
+const openai = new OpenAI();
+
 
 const PAGE_SIZE = 5;
 export const newPet: RequestHandler<unknown, StandardResponse<Pet>
             , Pet, unknown> = async (req, res, next) => {
     try { 
             const new_pet = req.body;
-    
             if (!new_pet.name) throw new ErrorWithStatus('Name is required',403);
-                const results = await PetModel.create(req.body);
+            if (!new_pet.age) throw new ErrorWithStatus('Age is required',403);
+            if (!new_pet.kind) throw new ErrorWithStatus('Kind is required',403);
+              
+            const results = await PetModel.create(new_pet);
+            //asyncronous update AI Embeded description
+            const embedding = generatePetEmbeding(results);
             const pet: Pet = {
                             _id: results._id,
                             name: results.name,
@@ -30,7 +37,7 @@ export const newPet: RequestHandler<unknown, StandardResponse<Pet>
                     
 };
 
-export const updatePet: RequestHandler<{petid:string}, StandardResponse<{ updated_documents:Number}>
+export const updatePet: RequestHandler<{petid:string}, StandardResponse<Pet>
             , Pet, unknown> = async (req, res, next) => {
     try {
         if (!req.file) {
@@ -38,21 +45,50 @@ export const updatePet: RequestHandler<{petid:string}, StandardResponse<{ update
             if (Number(!req.params.petid)){
                  new ErrorWithStatus('Id is required',403)
             } 
-            const results = await PetModel.updateOne({_id: req.params.petid}
-                , {$set: {...req.body }}
+            const results = await PetModel.findOneAndUpdate({_id: req.params.petid}
+                , {$set: {...req.body}}
+                , { returnNewDocument: true }
             )
-        
-            return res.status(200).json({success: true, 
-                data: { updated_documents:results.modifiedCount}});
-        
+            if (results){ 
+                const pet: Pet = {
+                    _id: results._id,
+                    name: results.name,
+                    kind: results.kind,
+                    breed: results.breed,
+                    age: results.age,
+                    gender: results.gender,
+                    description: results.description,
+                    sterilized: results.sterilized,
+                    image_path: results.image_path,
+                };
+                generatePetEmbeding(pet);
+                return res.status(200).json({success: true, 
+                    data: pet});
             } else {
-            // update Image
-            const results = await PetModel.updateOne({_id: req.params.id}
+                throw new ErrorWithStatus ('No pet updated',500);
+            }
+            
+        
+        } else {
+        // update Image
+            const results = await PetModel.findOneAndUpdate({_id: req.params.id}
                 , {$set: {image_path:req.file?.path }}
             )
-        
-            return res.status(200).json({success: true, 
-                data: { updated_documents:results.modifiedCount}});
+            if (results){ 
+                const pet: Pet = {
+                    _id: results._id,
+                    name: results.name,
+                    kind: results.kind,
+                    breed: results.breed,
+                    age: results.age,
+                    gender: results.gender,
+                    description: results.description,
+                    sterilized: results.sterilized,
+                    image_path: results.image_path,
+                };
+                return res.status(200).json({success: true, 
+                    data: pet});
+            }
         }
     } catch (err) {
         next(err);
@@ -103,6 +139,71 @@ export const listPets: RequestHandler<{page: number, ownerId:string} , StandardR
                     description:1,sterilized:1,image_path:1})
             .skip(page*PAGE_SIZE)
             .limit(PAGE_SIZE);
+        res.status(201).json({ success: true, data: results });
+
+    } catch (err) {
+        next(err);
+    }
+
+                     
+};
+
+
+async function generatePetEmbeding(pet: Pet){
+    const text = 'I am a ' +pet.age + ' years old ' +pet.gender! + ' ' + pet.breed! + ' ' +
+    pet.kind + '.' + pet.description;
+    const embedding =  await generateEmbedding(text);
+    
+    PetModel.updateOne({_id: pet._id}
+        , {$set: { embeddedDescription: embedding }}
+    ).then(res => 
+        console.log( res)
+    ).catch(error=>console.log(error));
+}
+
+
+async function generateEmbedding(input: string):Promise<number[]> {
+
+    const vectorEmbedding = await openai.embeddings.create({
+    model: 'text-embedding-3-small',
+    input 
+    });
+     console.log({
+     dimensions: vectorEmbedding.data[0].embedding.length, // 1536 dimentions
+     });
+    return vectorEmbedding.data[0].embedding;
+}
+
+export const recommendPet: RequestHandler<unknown , StandardResponse<Pet[]>
+            , {kind: string, age:string , preferences:string, userid?:string}, unknown> = async (req, res, next) => {
+
+   try { 
+        let text = '' ;
+        const { kind, age, preferences } = req.body;
+        if (kind && age){
+            text  = text + ' I am looking for a ' + age + ' ' + kind + '.' 
+        } 
+        text = text + ' ' + preferences
+       // const text = 'I am looking for  a senior dog . I would like to get pretty face with white fur'
+
+        const embeddedQuery = await generateEmbedding(text);
+    
+        const results = await PetModel.aggregate([
+            {
+            "$vectorSearch": {
+                    "queryVector": embeddedQuery,
+            "path": "embeddedDescription",
+            "numCandidates": 10,
+            "limit": 3,
+            "index": "vector_index",
+            }
+            },
+            {
+            '$project': {_id: 1, name:1,kind:1,breed:1,age:1,gender:1,
+                description:1,sterilized:1,image_path:1}
+            }
+           ]);
+           console.log (results);
         res.status(201).json({ success: true, data: results });
 
     } catch (err) {
