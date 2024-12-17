@@ -131,22 +131,22 @@ export class HeaderComponent{
 
 
   constructor(private router: Router) {
-    console.log(' Header user role ****'+ this.user_role +  ' admin role *****'+this.admin_role)
+    //console.log(' Header user role ****'+ this.user_role +  ' admin role *****'+this.admin_role)
   }
 
 
   createPet(): void { 
-    console.log('Navigate to Create Pet Form');
+  //  console.log('Navigate to Create Pet Form');
     this.router.navigate(['/create-pet']);
   }
 
   updatePet(): void {
-    console.log('Navigate to Update Pet Form');
+ //   console.log('Navigate to Update Pet Form');
     this.router.navigate(['/update-pet']);
   }
 
   deletePet(): void {
-    console.log('Navigate to Delete Pet Form');
+  //  console.log('Navigate to Delete Pet Form');
     this.router.navigate(['/delete-pet']);
   }
 
@@ -158,7 +158,6 @@ export class HeaderComponent{
     if (this.#storedState) {
       const parsedState = JSON.parse(this.#storedState);
       const user_role = parsedState.role.toLocaleLowerCase().trim();
-      console.log('User role stored state  haha *****'+user_role)
       return user_role === this.admin_role;
     }
     return false;

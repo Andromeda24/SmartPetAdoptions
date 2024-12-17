@@ -17,8 +17,8 @@ import { Kind } from './pet.type';
         <h2 class="h2-text">Add Pet</h2>
       </div>
       <label></label>
-      <label for="id">ID :</label>
-      <input placeholder="id" [formControl]="form.controls._id"/>
+      <!-- <label for="id">ID :</label>
+      <input placeholder="id" [formControl]="form.controls._id"/> -->
       <label for="name">Name :</label>
       <input placeholder="name" [formControl]="form.controls.name"/>
       <label for="kind">Kind :</label>
@@ -169,7 +169,6 @@ export class AddComponent {
   }
 
   form = inject(FormBuilder).nonNullable.group({
-    '_id': ['', Validators.required],
     'name': ['', Validators.required],
     'kind': [Kind.Dog, Validators.required],
     'breed': ['', Validators.required],
@@ -184,8 +183,8 @@ export class AddComponent {
     const input = event.target as HTMLInputElement;
     if (input.files!.length) {
       this.#profile_picture = input.files![0];
+     // console.log('Profile path' + this.#profile_picture)
     }
-
   }
 
   go() {  

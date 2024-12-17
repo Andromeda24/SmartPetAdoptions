@@ -130,8 +130,8 @@ export class SigninComponent {
   form_error : string | null = null;
 
   form = inject(FormBuilder).nonNullable.group({
-    'email': ['tta@miu.edu', Validators.required],
-    'password': ['123456', Validators.required],
+    'email': ['tt@miu.edu', Validators.required],
+    'password': ['ddd', Validators.required],
   });
 
   ngOnInit() {
@@ -153,7 +153,7 @@ export class SigninComponent {
   go() {
       this.#users_service.signin(this.form.value as User).subscribe(response => {
       const decoded = jwtDecode(response.data.token) as Token;
-      console.log("Role in SIGN IN *********" + decoded.role.toLocaleLowerCase().trim())
+     // console.log("Role in SIGN IN *********" + decoded.role.toLocaleLowerCase().trim())
       this.#state.$state.set({
         _id: decoded._id,
         name: decoded.name,

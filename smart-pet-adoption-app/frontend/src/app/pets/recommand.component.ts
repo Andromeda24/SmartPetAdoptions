@@ -11,9 +11,10 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ViewChild } from '@angular/core';
 import { PetTestService } from './pet.service.test';
 import { PetService } from './pet.service';
-import { Pet} from './pet.type';
-import { Kind } from './pet.type';
-import { AgeLevel } from './pet.type';
+import { Pet,SearchData,AgeLevel,Kind} from './pet.type';
+import { StateService } from '../state.service';
+import { response } from 'express';
+
 
 @Component({
   selector: 'app-recommand',
@@ -55,6 +56,10 @@ import { AgeLevel } from './pet.type';
           <th mat-header-cell *matHeaderCellDef> Breed </th>
           <td mat-cell *matCellDef="let pet"> {{ pet.breed }} </td>
         </ng-container>
+        <ng-container matColumnDef="image_path">
+          <th mat-header-cell *matHeaderCellDef> Image Path </th>
+          <td mat-cell *matCellDef="let pet"> {{ pet.image_path }} </td>
+        </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns" mat-sort-header></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
@@ -87,9 +92,10 @@ import { AgeLevel } from './pet.type';
 })
 
 export class RecommandComponent {
+  #state_service = inject(StateService);
+  #storedState = localStorage.getItem('SPA_APP_STATE');
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort!: MatSort;
-  searchQuery: string = '';
   recommendedPets: Pet[] = [];
   kindOptions = Object.values(Kind);
   ageOptions = Object.values(AgeLevel);
@@ -98,7 +104,7 @@ export class RecommandComponent {
   #petTestService = inject(PetTestService);
   pets = signal<Pet[]>([]);
   petsDataSource = new MatTableDataSource<Pet>([]);
-  displayedColumns: string[] = ['name', 'description','breed'];
+  displayedColumns: string[] = ['name', 'description','breed','image_path'];
 
   constructor(private petService: PetService) { 
     this.loadPets();
@@ -114,8 +120,8 @@ export class RecommandComponent {
   }
 
   loadPets(): void {
-    this.#petTestService.get_pets().subscribe(response => {
-      console.log("Pet Test Service " + JSON.stringify(response.data))
+    this.#petService.get_pets().subscribe(response => {
+     // console.log("Pet  Service " + JSON.stringify(response.data))
       if (response.success) {
         this.pets.set(response.data);
         this.petsDataSource.data = response.data;
@@ -138,10 +144,29 @@ export class RecommandComponent {
   }
   
   onSearch(): void {
-    // if (this.searchQuery.trim() !== '') {
-    //   this.petService.getRecommendedPetsBySearchQuery(this.searchQuery).subscribe((pets: Pet[]) => {
-    //     this.recommendedPets = pets;
-    //   });
-    // }
-  }
+    let userId;
+   if (this.#storedState) {
+        const parsedState = JSON.parse(this.#storedState);
+        userId=parsedState._id;  
+    }
+        const searchData: SearchData = {
+        kind: this.form.controls.kind.value,
+        age: this.form.controls.age.value,
+        preferences: this.form.controls.preference.value,
+        userId: userId
+      };
+            
+
+      this.#petService.recommand_pet(searchData).subscribe(response => {
+        console.log("recommand_pet" + JSON.stringify(response.data))
+        if (response.success) {
+          this.pets.set(response.data);
+          this.petsDataSource.data = response.data;
+        }
+      });   
+   }
+
+ 
+
 }
+

@@ -131,7 +131,6 @@ export class ListComponent {
   @ViewChild(MatSort, { static: false }) sort!: MatSort;
   #router = inject(Router);
   #petService = inject(PetService);
-  #petTestService = inject(PetTestService);
   pets = signal<Pet[]>([]);
   petsDataSource = new MatTableDataSource<Pet>([]);
   displayedColumns: string[] = ['name', 'description','breed','actions'];
@@ -140,20 +139,32 @@ export class ListComponent {
   
 
   constructor() {    
-    // this.#petService.get_pets().subscribe(response => {
-    //   if (response.success) this.pets.set(response.data);
-    // });
-    this.loadPets();
+     this.loadPets();
   }
 
   loadPets(): void {
-    this.#petTestService.get_pets().subscribe(response => {
-      console.log("Pet Test Service " + JSON.stringify(response.data))
-      if (response.success) {
-        this.pets.set(response.data);
-        this.petsDataSource.data = response.data;
-      }
-    });  
+    if(this.isAdmin()){
+      this.#petService.get_pets(10).subscribe(response => {
+        console.log("Pet Service  all" + JSON.stringify(response.data))
+        if (response.success) {
+          this.pets.set(response.data);
+          this.petsDataSource.data = response.data;
+        }
+      });  
+    }else{
+      if (this.#storedState) {
+        const parsedState = JSON.parse(this.#storedState);
+        const ownerId =  parsedState._id;
+        console.log("ownerID"+ownerId)
+        this.#petService.get_pets_byowner(10,ownerId).subscribe(response => {
+        console.log("Pet Service owner " + JSON.stringify(response.data))
+        if (response.success) {
+          this.pets.set(response.data);
+          this.petsDataSource.data = response.data;
+        }
+      });  
+    }
+    }   
   }
 
  

@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component,inject,signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PetTestService } from './pet.service.test';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
-
+import { PetService } from './pet.service';
 import { Pet } from './pet.type'
+import { environment } from '../../environments/environment.development';
 
 @Component({
   selector: 'app-detail',
@@ -26,12 +27,12 @@ import { Pet } from './pet.type'
           <p><strong>Gender:</strong> {{ pet?.gender }}</p>
           <p><strong>Sterilized:</strong> {{ pet?.sterilized }}</p>
         </mat-card-content>       
-        <!-- <mat-card-footer>
-        <button class="col-sm" mat-button (click)="goBack()">Back</button> 
-        </mat-card-footer>  -->
       </mat-card>
       <div class="image-container col-sm">
-          <img src={{pet?.image_path}} alt="Photo of Pet">
+          <!-- <img src={{pet?.image_path}} alt="Photo of Pet" 9fd3289207c246965f465aba77cbcd33> -->
+          <!-- <img src="http://localhost:3000/pictures/828bf02be1b1b28dba4dd2a83739a4b6" alt="Photo of Pet"> -->
+          <img src={{imageUrl}} alt="Photo of Pet">
+          
         </div>
       </div>
    
@@ -70,17 +71,21 @@ import { Pet } from './pet.type'
 })
 export class PetDetailComponent {
   id: string | null = null;  
+ // pets = signal<Pet[]>([]);
   pet: Pet | null = null;
-  constructor(private route: ActivatedRoute,private petTestService: PetTestService){ }
+  #petService = inject(PetService);
+  imageUrl :string | null = null;
+ // imageUrl = environment.SERVER_URL+"/pictures" +"/"+"9fd3289207c246965f465aba77cbcd33";
+  constructor(private route: ActivatedRoute,private petService: PetTestService){ 
 
-  ngOnInit() {
-    // Get the pet ID from the route parameters
     this.id = this.route.snapshot.paramMap.get('id');
     if (this.id) {    
-      this.petTestService.get_pet(this.id).subscribe(
+      this.#petService.get_pets().subscribe(
         response => {
-          if (response.success) {
-            this.pet = response.data;          
+          if (response.success) {       
+           this.pet = response.data.find(p => p._id === this.id) as Pet ?? null;          
+           this.imageUrl=  environment.SERVER_URL+this.pet.image_path.replace(/\\/g, '/');
+            console.log('Image path' + this.imageUrl)
           } else {
             this.pet = null;           
           }
@@ -90,6 +95,10 @@ export class PetDetailComponent {
         }
       );
     }
+  }
+
+  ngOnInit() {
+
   }
 
 }
