@@ -24,7 +24,7 @@ import { Kind } from './pet.type';
       <label for="kind">Kind :</label>
       <!-- <input placeholder="kind" [formControl]="form.controls.kind"/> -->
       <select id="kind" [formControl]="form.controls.kind">
-      <option *ngFor="let kind of kindOptions" [value]="kind">{{ kind }}</option>
+      <option *ngFor="let kind of kindOptions.slice(1)" [value]="kind">{{ kind }}</option>
       </select>
 
       <label for="breed">Breed :</label>

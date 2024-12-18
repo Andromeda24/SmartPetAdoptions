@@ -38,6 +38,14 @@ import { PetService } from './pet.service';
           <th mat-header-cell *matHeaderCellDef> Breed </th>
           <td mat-cell *matCellDef="let pet"> {{ pet.breed }} </td>
         </ng-container>
+        <ng-container matColumnDef="kind">
+          <th mat-header-cell *matHeaderCellDef> Kind </th>
+          <td mat-cell *matCellDef="let pet"> {{ pet.kind }} </td>
+        </ng-container>
+        <ng-container matColumnDef="age">
+          <th mat-header-cell *matHeaderCellDef> Age </th>
+          <td mat-cell *matCellDef="let pet"> {{ pet.age }} </td>
+        </ng-container>
         <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef> Actions </th>
         <td mat-cell *matCellDef="let pet">
@@ -57,6 +65,7 @@ import { PetService } from './pet.service';
       </table>
       <mat-paginator [length]="petsDataSource.data.length" [pageSize]="5"></mat-paginator> 
   </div>
+  <router-outlet></router-outlet>
   `,
   styles: [`
       h2 {
@@ -120,20 +129,20 @@ import { PetService } from './pet.service';
 
       .action-buttons {
         display: flex;
-        gap: 6px; /* Adjust spacing as needed */
+        gap: 6px; 
       }
     `]
 })
 export class ListComponent {
   #state_service = inject(StateService);
+  #router = inject(Router);
   #storedState = sessionStorage.getItem('SPA_APP_STATE');
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort!: MatSort;
-  #router = inject(Router);
   #petService = inject(PetService);
   pets = signal<Pet[]>([]);
   petsDataSource = new MatTableDataSource<Pet>([]);
-  displayedColumns: string[] = ['name', 'description','breed','actions'];
+  displayedColumns: string[] = ['name', 'description','breed','kind','age','actions'];
   user_role :string | null = null; 
   admin_role = Role.Admin.toLocaleLowerCase();
   
@@ -143,11 +152,8 @@ export class ListComponent {
   }
 
   loadPets(): void {
-    console.log('Admin ' +this.isAdmin())
-    if(this.isAdmin()){
-
+     if(this.isAdmin()){
       this.#petService.get_pets().subscribe(response => { 
-        console.log("Pet Service All pets " + JSON.stringify(response.data))
         if (response.success) {
           this.pets.set(response.data);
           this.petsDataSource.data = response.data;
@@ -158,7 +164,6 @@ export class ListComponent {
         const parsedState = JSON.parse(this.#storedState);
         const ownerId =  parsedState._id;      
         this.#petService.get_pets_byowner(ownerId).subscribe(response => {
-        console.log("Pet Service owner " + JSON.stringify(response.data))
         if (response.success) {
           this.pets.set(response.data);
           this.petsDataSource.data = response.data;
@@ -172,8 +177,7 @@ export class ListComponent {
   isAdmin(): boolean {
     if (this.#storedState) {
       const parsedState = JSON.parse(this.#storedState);
-      const user_role = parsedState.role.toLocaleLowerCase().trim();     
-      console.log('aa '+ user_role.toLocaleLowerCase() + " *" +this.admin_role.toLocaleLowerCase() )
+      const user_role = parsedState.role.toLocaleLowerCase().trim();         
       return user_role.toLocaleLowerCase() === this.admin_role.toLocaleLowerCase();
     }
     return false;
@@ -192,13 +196,6 @@ export class ListComponent {
       console.warn('Sort not found!');
     }
   }
-  // ngAfterViewInit() {
-  //   this.pets.subscribe(petData => {
-  //     this.petsDataSource.data = petData;
-  //     this.petsDataSource.paginator = this.paginator;
-  //     this.petsDataSource.sort = this.sort;
-  //   });
-  // }
 
 
   add() {
@@ -207,7 +204,8 @@ export class ListComponent {
 
   editPet(petId: string) {
     console.log('editPet')
-    this.#router.navigate(['/pets/update/', petId]);
+    this.#router.navigate(['/pets/update', petId]);
+   
   }
 
   deletePet(petId: string) {

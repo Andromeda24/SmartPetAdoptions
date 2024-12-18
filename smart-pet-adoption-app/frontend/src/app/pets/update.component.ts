@@ -23,7 +23,7 @@ import { Router, ActivatedRoute } from '@angular/router';
       <input placeholder="name" [formControl]="form.controls.name"/>
       <label for="kind">Kind :</label>
       <select id="kind" [formControl]="form.controls.kind">
-      <option *ngFor="let kind of kindOptions" [value]="kind">{{ kind }}</option>
+      <option *ngFor="let kind of kindOptions.slice(1)" [value]="kind">{{ kind }}</option>
       </select>
       <label for="breed">Breed :</label>
       <input placeholder="breed" [formControl]="form.controls.breed"/>
@@ -196,7 +196,7 @@ export class UpdateComponent implements OnInit {
     
 
     const petId = this.#route.snapshot.paramMap.get('id'); 
-   // console.log('Update pet Id '+petId)
+    console.log('Update pet Id '+petId)
     if (petId) {
       this.#petService.get_pet(petId).subscribe(response =>{
         console.log('response Update '+response.data)
