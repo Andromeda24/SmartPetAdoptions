@@ -32,9 +32,12 @@ export class PetService {
     return this.#http.post<{ success: boolean, data: string; }>(environment.SERVER_URL + 'pets/', data);
   }
 
-  put_pet(pet: Pet) {
-    
+  adopt_pet(pet: Pet) {    
     return this.#http.put<StandardResponse<number>>(environment.SERVER_URL + `pets/${pet._id}`, pet);
+  }
+  
+  put_pet(pet_id:string,data: FormData) {  
+    return this.#http.put<{ success: boolean, data: string; }>(environment.SERVER_URL + `pets/${pet_id}`, data);
   }
 
   delete_pet(pet_id: string) {

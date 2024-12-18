@@ -22,7 +22,7 @@ import { response } from 'express';
   imports: [CommonModule,MatTableModule,MatSort,MatPaginator,RouterModule,FormsModule, ReactiveFormsModule,MatPaginatorModule],
   template: `
    <div class="recommad-container">  
-   <h2>Pet Recommandation by powered AI </h2>
+   <h2>Pet Recommendation powered by AI </h2>
    <form [formGroup]="form">
    <div class="container">
     <div class="row">      

@@ -50,7 +50,7 @@ import { PetService } from './pet.service';
         <th mat-header-cell *matHeaderCellDef> Actions </th>
         <td mat-cell *matCellDef="let pet">
         <ng-container *ngIf="isAdmin()"> 
-          <button mat-icon-button (click)="editPet(pet._id)">
+        <button mat-icon-button [routerLink]="['/pets/update', pet._id]">
             <mat-icon>edit</mat-icon>
           </button>
           <button mat-icon-button color="warn" (click)="deletePet(pet._id)">
@@ -65,7 +65,7 @@ import { PetService } from './pet.service';
       </table>
       <mat-paginator [length]="petsDataSource.data.length" [pageSize]="5"></mat-paginator> 
   </div>
-  <router-outlet></router-outlet>
+
   `,
   styles: [`
       h2 {
@@ -147,7 +147,8 @@ export class ListComponent {
   admin_role = Role.Admin.toLocaleLowerCase();
   
 
-  constructor() {    
+  constructor(router: Router) {    
+    this.#router = router; 
      this.loadPets();
   }
 

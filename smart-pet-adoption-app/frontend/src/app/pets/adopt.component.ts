@@ -109,10 +109,9 @@ adopt() {
   if(typeof filteredPet!== 'undefined'){
     filteredPet.ownerId = this.form.controls.userId.value;
 
-
     
   console.log('Updating Pet Filter Owner ID:'+filteredPet.ownerId);
-    this.#petService.put_pet(filteredPet).subscribe(response => {
+    this.#petService.adopt_pet(filteredPet).subscribe(response => {
       if (response.success) {
         alert("Pet has been adopted successfully!")
         this.#router.navigate(['', 'pets']); 

@@ -179,7 +179,7 @@ export class AddComponent {
     'age': [0, [Validators.required,Validators.pattern(/^\d+$/)]],
     'gender': [ Gender.Female, Validators.required],
     'description': ['', Validators.required],
-    'file': [null, Validators.nullValidator],
+    'file': [''],
     'sterilized': [false, Validators.required]
   });
 
@@ -201,7 +201,10 @@ export class AddComponent {
     
     formData.append('gender', this.form.controls.gender.value);
     formData.append('description', this.form.controls.description.value);
-    formData.append('profile_picture', this.#profile_picture);
+  //  formData.append('profile_picture', this.#profile_picture);
+    if (this.#profile_picture) {
+      formData.append('profile_picture', this.#profile_picture);
+    }  
     formData.append('sterilized', this.form.controls.sterilized.value.toString());
     formData.append('ownerId', '');
     

@@ -2,9 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { PetService } from './pet.service';
-import { Pet } from './pet.type';
-import { Gender } from './pet.type';
-import { Kind } from './pet.type';
+import { Pet,Kind,Gender } from './pet.type';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -14,11 +12,11 @@ import { Router, ActivatedRoute } from '@angular/router';
      <form [formGroup]="form" (ngSubmit)="update()" class="update-container">
        <div class="image-container">
         <img src="assets/images/pets/updatePet.png" alt="Update Pet"/>
-        <h2 class="h2-text">Update Pet</h2>
-      </div>
+        <h3 class="h2-text">Update Pet</h3>
+      </div>      
       <label></label>
-      <label for="id">ID :</label>
-      <input placeholder="id" [formControl]="form.controls._id" readonly/>
+      <!-- <label for="id">ID :</label>
+      <input  placeholder="id" [formControl]="form.controls._id" readonly/> -->
       <label for="name">Name :</label>
       <input placeholder="name" [formControl]="form.controls.name"/>
       <label for="kind">Kind :</label>
@@ -36,7 +34,7 @@ import { Router, ActivatedRoute } from '@angular/router';
       <label for="description">Description :</label> 
       <input placeholder="description" [formControl]="form.controls.description"/>
       <label for="file">Profile Picture :</label>
-      <input type="file" [formControl]="form.controls.image_path" (change)="pickup_file($event)"/>  
+      <input type="file" [formControl]="form.controls.file" (change)="pickup_file($event)"/>  
       <label for="sterilized">Sterilized :</label> 
       <input placeholder="sterilized"  type="checkbox" [formControl]="form.controls.sterilized"/>
       <button [disabled]="form.invalid">Update Pet</button>
@@ -73,7 +71,7 @@ import { Router, ActivatedRoute } from '@angular/router';
     }
 
     .h2-text {
-          font-size: 24px;
+        
           font-weight: bold;
           color: #333;
         }
@@ -107,7 +105,7 @@ import { Router, ActivatedRoute } from '@angular/router';
         width: 30%; 
         grid-column: 2; 
         padding: 10px;
-        background-color: #28a745;
+        background-color:rgb(53, 108, 148);
         color: white;
         border: none;
         border-radius: 5px;
@@ -126,6 +124,7 @@ import { Router, ActivatedRoute } from '@angular/router';
     }
   `]
 })
+
 export class UpdateComponent implements OnInit {
   #profile_picture!: File;
   #petService = inject(PetService);
@@ -134,6 +133,7 @@ export class UpdateComponent implements OnInit {
   kindOptions = Object.values(Kind);
   genderOptions = Object.values(Gender);
   form_error : string | null = null;
+  pet: Pet | null = null;
 
   form = inject(FormBuilder).nonNullable.group({
     '_id': ['', Validators.required],
@@ -143,13 +143,14 @@ export class UpdateComponent implements OnInit {
     'age': [0, [Validators.required,Validators.pattern(/^\d+$/)]],
     'gender': ['', Validators.required],
     'description': ['', Validators.required],
-    'image_path': ['', Validators.required],
+    'file': [''],
     'sterilized': [false, Validators.required]
   });
 
-  ngOnInit() {
 
+  constructor(private route: ActivatedRoute) {}
   
+  ngOnInit() {  
       this.form.valueChanges.subscribe(() => {
         this.form_error = null;   
         if (this.form.controls.name.errors?.['required']) {
@@ -198,12 +199,31 @@ export class UpdateComponent implements OnInit {
     const petId = this.#route.snapshot.paramMap.get('id'); 
     console.log('Update pet Id '+petId)
     if (petId) {
-      this.#petService.get_pet(petId).subscribe(response =>{
-        console.log('response Update '+response.data)
-        if (response.success) {
-          this.#router.navigate(['', 'pets']); 
-        }
-      });
+          
+            this.#petService.get_pets().subscribe(
+              response => {
+                if (response.success) {       
+                 this.pet = response.data.find(p => p._id === petId) as Pet ?? null;              
+                 this.form.patchValue({
+                  _id: this.pet._id ?? '',
+                  name: this.pet.name,
+                  kind: this.pet.kind,
+                  breed: this.pet.breed,
+                  age: this.pet.age,
+                  gender: this.pet.gender,
+                  description: this.pet.description,
+                  sterilized: this.pet.sterilized,
+               //   image_path: this.pet.image_path?? '',
+                });       
+                } else {
+                  this.pet = null;           
+                }
+              },
+              (error) => {
+                console.error('Error fetching pet details', error);        
+              }
+            );
+ 
     }
   }
 
@@ -211,12 +231,35 @@ export class UpdateComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     if (input.files!.length) {
       this.#profile_picture = input.files![0];
+      console.log('Profile path' + this.#profile_picture.name)
     }
   }
 
+
   update() {
+
+    const petId=this.form.controls._id.value;
+    const formData = new FormData();
+    formData.append('_id', this.form.controls._id.value);
+    formData.append('name', this.form.controls.name.value);
+    formData.append('kind', this.form.controls.kind.value);
+    formData.append('breed', this.form.controls.breed.value);
+    formData.append('age', this.form.controls.age.value.toString());
+    formData.append('gender', this.form.controls.gender.value);
+    if (this.#profile_picture) {
+      formData.append('profile_picture', this.#profile_picture);
+    }  
+    formData.append('description', this.form.controls.description.value);   
+
+   //  if (this.#profile_picture) {
+    //  formData.append('image_path', this.#profile_picture); 
+   //   } 
+   
+    formData.append('sterilized', this.form.controls.sterilized.value ? 'true' : 'false');
+  
     console.log('Updating Pet:', this.form.value);
-    this.#petService.put_pet(this.form.value as Pet).subscribe(response => {
+
+    this.#petService.put_pet(petId,formData).subscribe(response => {
       if (response.success) {
         alert("Pet has been updated successfully.")
         this.#router.navigate(['', 'pets']); 
