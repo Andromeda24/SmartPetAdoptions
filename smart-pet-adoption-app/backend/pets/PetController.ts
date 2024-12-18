@@ -52,9 +52,9 @@ export const updatePet: RequestHandler<{petid:string}, StandardResponse<Pet>
         if (req.file) {
             updateImage = {image_path:req.file.path };
         }  
-
+        console.log(req.params);
         if (Number(!req.params.petid)){
-                throw new ErrorWithStatus('Id is required',403)
+                throw new ErrorWithStatus('Id is required',401)
         } 
 
         const results = await PetModel.findOneAndUpdate({_id: req.params.petid}
