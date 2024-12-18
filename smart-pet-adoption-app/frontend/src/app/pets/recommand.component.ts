@@ -9,7 +9,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTableDataSource } from '@angular/material/table';
 import { ViewChild } from '@angular/core';
-import { PetTestService } from './pet.service.test';
+
 import { PetService } from './pet.service';
 import { Pet,SearchData,AgeLevel,Kind} from './pet.type';
 import { StateService } from '../state.service';
@@ -112,7 +112,7 @@ export class RecommandComponent {
   ageOptions = Object.values(AgeLevel);
   form_error : string | null = null;
   #petService = inject(PetService);
-  #petTestService = inject(PetTestService);
+  
   pets = signal<Pet[]>([]);
   petsDataSource = new MatTableDataSource<Pet>([]);
   displayedColumns: string[] = ['name', 'description','kind','age','breed'];
