@@ -205,11 +205,11 @@ export class AddComponent {
     formData.append('sterilized', this.form.controls.sterilized.value.toString());
     formData.append('ownerId', '');
     
-    //  const petData = Object.fromEntries(formData) as unknown as Pet;
       this.#petService.post_pet(formData).subscribe(response => {
         console.log(" Pet Response "+ JSON.stringify(response))
       if (response.success) {
-        this.#router.navigate(['', 'pets']);
+        alert("Pet has been created successfully.")
+         this.#router.navigate(['', 'pets']);
       }
     });
   }

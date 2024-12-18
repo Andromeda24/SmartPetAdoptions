@@ -93,7 +93,7 @@ import { response } from 'express';
 
 export class RecommandComponent {
   #state_service = inject(StateService);
-  #storedState = localStorage.getItem('SPA_APP_STATE');
+  #storedState = sessionStorage.getItem('SPA_APP_STATE');
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort!: MatSort;
   recommendedPets: Pet[] = [];
@@ -111,8 +111,8 @@ export class RecommandComponent {
   }
     form = inject(FormBuilder).nonNullable.group({
       '_id': ['', Validators.required],     
-      'kind': [Kind.Dog, Validators.required],     
-      'age': [AgeLevel.Junior, [Validators.required,Validators.pattern(/^\d+$/)]],    
+      'kind': [Kind.Any, Validators.required],     
+      'age': [AgeLevel.Any, [Validators.required,Validators.pattern(/^\d+$/)]],    
       'preference': ['', Validators.required],     
     });
 

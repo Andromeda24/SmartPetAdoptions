@@ -14,6 +14,7 @@ import { StateService } from './state.service';
             <img src="/assets/images/pets/shelter.png" alt="Smart Pet Adoption Logo"> 
           </div> 
           <nav> 
+            <p> Current User : {{ user_name}} : {{ user_role }}</p>
             <ul class="nav-list"> 
               <li><a routerLink="/">Home</a></li>   
               <li><a [routerLink]="['/about']">About</a></li>     
@@ -125,13 +126,19 @@ button {
 })
 export class HeaderComponent{
   #state_service = inject(StateService);
-  #storedState = localStorage.getItem('SPA_APP_STATE');
+  #storedState = sessionStorage.getItem('SPA_APP_STATE');
   isDropdownOpen = false; 
   user_role :string | null = null; 
   admin_role = Role.Admin.toLocaleLowerCase();
-
+  user_name : string | null = null;
 
   constructor(private router: Router) {
+    if (this.#storedState) {
+      const parsedState = JSON.parse(this.#storedState);   
+       this.user_name= parsedState.name;
+       this.user_role = parsedState.role;
+    
+    }
     //console.log(' Header user role ****'+ this.user_role +  ' admin role *****'+this.admin_role)
   }
 
@@ -158,8 +165,10 @@ export class HeaderComponent{
   isAdmin(): boolean {
     if (this.#storedState) {
       const parsedState = JSON.parse(this.#storedState);
-      const user_role = parsedState.role.toLocaleLowerCase().trim();
-      return user_role === this.admin_role;
+      const user_role_local = parsedState.role.toLocaleLowerCase().trim();
+       this.user_name= parsedState.name;
+       this.user_role = parsedState.role;
+      return user_role_local === this.admin_role;
     }
     return false;
   }

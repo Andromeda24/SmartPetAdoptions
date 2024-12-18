@@ -130,8 +130,8 @@ export class SigninComponent {
   form_error : string | null = null;
 
   form = inject(FormBuilder).nonNullable.group({
-    'email': ['tt@miu.edu', Validators.required],
-    'password': ['ddd', Validators.required],
+    'email': ['', Validators.required],
+    'password': ['', Validators.required],
   });
 
   ngOnInit() {

@@ -27,7 +27,7 @@ export class StateService {
    //$state = signal<GlobalState>(test_data);
   
   spaEffect = effect(() => {
-    localStorage.setItem('SPA_APP_STATE', JSON.stringify(this.$state()));    
+    sessionStorage.setItem('SPA_APP_STATE', JSON.stringify(this.$state()));    
   });
 
   isLoggedIn() {

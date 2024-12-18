@@ -10,7 +10,7 @@ import { HomeComponent } from './home.component';
 
 function initialize() {
   const state_service = inject(StateService);
-  const state = localStorage.getItem('SPA_APP_STATE');
+  const state = sessionStorage.getItem('SPA_APP_STATE');
   if (state) {
     state_service.$state.set(JSON.parse(state));
   }

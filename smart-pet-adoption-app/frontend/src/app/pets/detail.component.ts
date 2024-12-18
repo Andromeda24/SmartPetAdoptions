@@ -84,7 +84,7 @@ export class PetDetailComponent {
         response => {
           if (response.success) {       
            this.pet = response.data.find(p => p._id === this.id) as Pet ?? null;          
-         //  this.imageUrl=  environment.SERVER_URL+this.pet.image_path;
+           this.imageUrl=  environment.SERVER_URL+this.pet.image_path?.replace(/\\/g, '/');
             console.log('Image path' + this.imageUrl)
           } else {
             this.pet = null;           

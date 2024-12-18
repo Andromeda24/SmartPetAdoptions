@@ -195,9 +195,11 @@ export class UpdateComponent implements OnInit {
       });
     
 
-    const petId = this.#route.snapshot.paramMap.get('id'); // Get ID from route
+    const petId = this.#route.snapshot.paramMap.get('id'); 
+   // console.log('Update pet Id '+petId)
     if (petId) {
       this.#petService.get_pet(petId).subscribe(response =>{
+        console.log('response Update '+response.data)
         if (response.success) {
           this.#router.navigate(['', 'pets']); 
         }
@@ -216,6 +218,7 @@ export class UpdateComponent implements OnInit {
     console.log('Updating Pet:', this.form.value);
     this.#petService.put_pet(this.form.value as Pet).subscribe(response => {
       if (response.success) {
+        alert("Pet has been updated successfully.")
         this.#router.navigate(['', 'pets']); 
       }
     });

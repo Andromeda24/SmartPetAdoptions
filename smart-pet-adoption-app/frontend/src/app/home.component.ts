@@ -50,7 +50,7 @@ export class HomeComponent {
   state_service = inject(StateService);
 
   ngOnInit() {
-    localStorage.clear();
+    sessionStorage.clear();
     this.state_service.$state.set(initial_state);
   }
 }

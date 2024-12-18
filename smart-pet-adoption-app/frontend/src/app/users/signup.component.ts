@@ -176,6 +176,7 @@ export class SignupComponent {
     formData.append('address', this.form.controls.address.value);   
     formData.append('phone', this.form.controls.phone.value);   
     this.#users_service.singup(formData).subscribe(response => { 
+      alert("User has been created successfully.")
       this.#router.navigate(['', 'signin']);
     },
     (error) => {      

@@ -105,12 +105,12 @@ import { PetService } from './pet.service';
     }
 
       button {
-        max-width : 40px;
+        max-width : 50px;
         max-height : 40px;
       }
       
       button mat-icon {
-        max-width: 20px; 
+        max-width: 30px; 
         max-height: 20px;
       } 
 
@@ -120,13 +120,13 @@ import { PetService } from './pet.service';
 
       .action-buttons {
         display: flex;
-        gap: 5px; /* Adjust spacing as needed */
+        gap: 6px; /* Adjust spacing as needed */
       }
     `]
 })
 export class ListComponent {
   #state_service = inject(StateService);
-  #storedState = localStorage.getItem('SPA_APP_STATE');
+  #storedState = sessionStorage.getItem('SPA_APP_STATE');
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort!: MatSort;
   #router = inject(Router);
@@ -143,9 +143,11 @@ export class ListComponent {
   }
 
   loadPets(): void {
+    console.log('Admin ' +this.isAdmin())
     if(this.isAdmin()){
+
       this.#petService.get_pets(10).subscribe(response => {
-        console.log("Pet Service  all" + JSON.stringify(response.data))
+       console.log("Pet Service  all" + JSON.stringify(response.data))
         if (response.success) {
           this.pets.set(response.data);
           this.petsDataSource.data = response.data;
@@ -172,7 +174,8 @@ export class ListComponent {
     if (this.#storedState) {
       const parsedState = JSON.parse(this.#storedState);
       const user_role = parsedState.role.toLocaleLowerCase().trim();     
-      return user_role === this.admin_role;
+      console.log('aa '+ user_role.toLocaleLowerCase() + " *" +this.admin_role.toLocaleLowerCase() )
+      return user_role.toLocaleLowerCase() === this.admin_role.toLocaleLowerCase();
     }
     return false;
   }
@@ -213,6 +216,7 @@ export class ListComponent {
       console.log('petId in delete' + petId)
       this.#petService.delete_pet(petId).subscribe(
         () => {
+          alert("Pet has been deleted successfully.")
           this.loadPets(); 
         },
         (error) => {

@@ -12,7 +12,9 @@ import { UsersService } from '../users/users.service';
   selector: 'app-adopt',
   imports: [ReactiveFormsModule,CommonModule],
   template: `
-   <form [formGroup]="form" (ngSubmit)="adopt()" class="adopt-container">
+  <div class="pet-container">
+   <p>Pet Adoption</p>
+   <form [formGroup]="form" (ngSubmit)="adopt()" class="adopt-container">      
       <label for="petId">Pet Name :</label> 
       <select id="petId" formControlName="petId">
       <option *ngFor="let pet of pets()" [value]="pet._id">{{ pet.name }}</option>
@@ -23,10 +25,21 @@ import { UsersService } from '../users/users.service';
       </select>
       <button [disabled]="form.invalid">Adopt Pet</button>
    </form>
+</div>
   `,
   styles: [`
+       .pet-container {             
+        width: 50%;
+        margin: 20px auto;
+        padding: 20px 30px 20px 20px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+      
+       }
+
      .adopt-container {        
-        display: grid; 
+       display: grid; 
         grid-template-columns: 150px 1fr; 
         gap: 10px 20px;
         width: 50%;
@@ -42,7 +55,7 @@ import { UsersService } from '../users/users.service';
 })
 export class AdoptComponent {
   #state_service = inject(StateService);
-  #storedState = localStorage.getItem('SPA_APP_STATE');
+  #storedState = sessionStorage.getItem('SPA_APP_STATE');
   #router = inject(Router);
   #petService = inject(PetService);
   #userService = inject(UsersService);
@@ -54,8 +67,7 @@ export class AdoptComponent {
   petOptions: { value: string | null; label: string; }[] = [];
 
   constructor() {    
-    this.loadPets();
-       
+    this.loadPets();       
       }
 
  form = inject(FormBuilder).nonNullable.group({
@@ -68,13 +80,14 @@ export class AdoptComponent {
    if(this.isAdmin()){
      this.#petService.get_pets(10).subscribe(response => {
        if (response.success) {       
-        this.pets.set(response.data);     
+        this.pets.set(response.data.filter(pet=>pet.ownerId === ''));     
        }
      });      
-
+ //    console.log('Role.Seeker.toString()' +Role.Seeker.toString())
      this.#userService.get_users(Role.Seeker.toString()).subscribe(response => {
+     // console.log('response.data' +JSON.stringify(response.data.filter(user=>user.role.toLocaleLowerCase() === Role.Seeker.toLocaleLowerCase())))
       if (response.success) {
-        this.users.set(response.data)
+        this.users.set(response.data.filter(user=>user.role.toLocaleLowerCase() === Role.Seeker.toLocaleLowerCase()))
       }
      });    
    }   
@@ -101,6 +114,7 @@ adopt() {
   console.log('Updating Pet Filter Owner ID:'+filteredPet.ownerId);
     this.#petService.put_pet(filteredPet).subscribe(response => {
       if (response.success) {
+        alert("Pet has been adopted successfully!")
         this.#router.navigate(['', 'pets']); 
       }
     });
