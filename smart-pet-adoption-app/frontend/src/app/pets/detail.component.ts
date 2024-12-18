@@ -28,9 +28,7 @@ import { environment } from '../../environments/environment.development';
           <p><strong>Sterilized:</strong> {{ pet?.sterilized }}</p>
         </mat-card-content>       
       </mat-card>
-      <div class="image-container col-sm">
-          <!-- <img src={{pet?.image_path}} alt="Photo of Pet" 9fd3289207c246965f465aba77cbcd33> -->
-          <!-- <img src="http://localhost:3000/pictures/828bf02be1b1b28dba4dd2a83739a4b6" alt="Photo of Pet"> -->
+      <div class="image-container col-sm">        
           <img src={{imageUrl}} alt="Photo of Pet">
           
         </div>
@@ -84,8 +82,7 @@ export class PetDetailComponent {
         response => {
           if (response.success) {       
            this.pet = response.data.find(p => p._id === this.id) as Pet ?? null;          
-           this.imageUrl=  environment.SERVER_URL+this.pet.image_path?.replace(/\\/g, '/');
-            console.log('Image path' + this.imageUrl)
+           this.imageUrl=  environment.SERVER_URL+this.pet.image_path?.replace(/\\/g, '/');          
           } else {
             this.pet = null;           
           }

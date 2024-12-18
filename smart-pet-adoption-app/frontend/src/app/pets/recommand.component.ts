@@ -22,6 +22,7 @@ import { response } from 'express';
   imports: [CommonModule,MatTableModule,MatSort,MatPaginator,RouterModule,FormsModule, ReactiveFormsModule,MatPaginatorModule],
   template: `
    <div class="recommad-container">  
+   <h2>Pet Recommandation by powered AI </h2>
    <form [formGroup]="form">
    <div class="container">
     <div class="row">      
@@ -41,7 +42,7 @@ import { response } from 'express';
 </div>
     <div class="list-container">
       <div class="title-container">      
-      <h3>Best Match Pet List ...</h3>
+      <h2>Best Match Pet List</h2>
       </div>
       <table mat-table [dataSource]="petsDataSource" matSort>
         <ng-container matColumnDef="name">
@@ -51,6 +52,16 @@ import { response } from 'express';
         <ng-container matColumnDef="description">
           <th mat-header-cell *matHeaderCellDef> Description </th>
           <td mat-cell *matCellDef="let pet"> {{ pet.description }} </td>
+        </ng-container>
+       
+        <ng-container matColumnDef="kind">
+          <th mat-header-cell *matHeaderCellDef> Kind </th>
+          <td mat-cell *matCellDef="let pet"> {{ pet.kind }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="age">
+          <th mat-header-cell *matHeaderCellDef> Age </th>
+          <td mat-cell *matCellDef="let pet"> {{ pet.age }} </td>
         </ng-container>
         <ng-container matColumnDef="breed">
           <th mat-header-cell *matHeaderCellDef> Breed </th>
@@ -104,7 +115,7 @@ export class RecommandComponent {
   #petTestService = inject(PetTestService);
   pets = signal<Pet[]>([]);
   petsDataSource = new MatTableDataSource<Pet>([]);
-  displayedColumns: string[] = ['name', 'description','breed'];
+  displayedColumns: string[] = ['name', 'description','kind','age','breed'];
 
   constructor(private petService: PetService) { 
   //  this.loadPets();

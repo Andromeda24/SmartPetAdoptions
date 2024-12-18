@@ -13,7 +13,7 @@ import { UsersService } from '../users/users.service';
   imports: [ReactiveFormsModule,CommonModule],
   template: `
   <div class="pet-container">
-   <p>Pet Adoption</p>
+   <h2>Pet Adoption</h2>
    <form [formGroup]="form" (ngSubmit)="adopt()" class="adopt-container">      
       <label for="petId">Pet Name :</label> 
       <select id="petId" formControlName="petId">
@@ -23,6 +23,7 @@ import { UsersService } from '../users/users.service';
         <select id="userId" formControlName="userId">
         <option *ngFor="let user of users()" [value]="user?._id">{{ user.name }}</option>
       </select>
+      
       <button [disabled]="form.invalid">Adopt Pet</button>
    </form>
 </div>
@@ -103,7 +104,6 @@ export class AdoptComponent {
  }
 
 adopt() {
-  console.log('edit Pet ****')
   //userId: string,petId : string
   let filteredPet: Pet | undefined = this.pets().find((pet) => pet._id === this.form.controls.petId.value);
   if(typeof filteredPet!== 'undefined'){

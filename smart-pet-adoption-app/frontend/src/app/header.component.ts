@@ -143,21 +143,7 @@ export class HeaderComponent{
   }
 
 
-  createPet(): void { 
-  //  console.log('Navigate to Create Pet Form');
-    this.router.navigate(['/create-pet']);
-  }
-
-  updatePet(): void {
- //   console.log('Navigate to Update Pet Form');
-    this.router.navigate(['/update-pet']);
-  }
-
-  deletePet(): void {
-  //  console.log('Navigate to Delete Pet Form');
-    this.router.navigate(['/delete-pet']);
-  }
-
+  
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
