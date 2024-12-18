@@ -10,11 +10,6 @@ export const newPet: RequestHandler<unknown, StandardResponse<Pet>
             , Pet, unknown> = async (req, res, next) => {
     try { 
 
-
-            console.log(req.file);
-            console.log(req.headers);
-            console.log(req.body);
-    
             if (!req.body.name) 
                 throw new ErrorWithStatus('Name is required',403);
             let new_pet = req.body;         
@@ -52,14 +47,14 @@ export const updatePet: RequestHandler<{petid:string}, StandardResponse<Pet>
         if (req.file) {
             updateImage = {image_path:req.file.path };
         }  
-        console.log(req.params);
+
         if (Number(!req.params.petid)){
                 throw new ErrorWithStatus('Id is required',401)
         } 
 
         const results = await PetModel.findOneAndUpdate({_id: req.params.petid}
             , {$set: {...req.body, ...updateImage}}
-            , { returnNewDocument: true }
+            , { returnDocument: "after", returnNewDocument: true }
         )
         if (results){ 
             const pet: Pet = {
@@ -120,8 +115,6 @@ export const listPets: RequestHandler<{page: number, ownerId:string} , StandardR
         if (Number(req.params.page)){
             page=Number(req.params.page)-1;
         } 
-        console.log(query) ;
-        console.log(req.params ) ;
         const results = await PetModel
             .find(query
                 ,{_id: 1, name:1,kind:1,breed:1,age:1,gender:1,
@@ -141,12 +134,13 @@ export const listPets: RequestHandler<{page: number, ownerId:string} , StandardR
 async function generatePetEmbeding(pet: Pet){
     const text = 'I am a ' +pet.age + ' years old ' +pet.gender! + ' ' + pet.breed! + ' ' +
     pet.kind + '.' + pet.description;
+    
     const embedding =  await generateEmbedding(text);
     
     PetModel.updateOne({_id: pet._id}
         , {$set: { embeddedDescription: embedding }}
     ).then(res => 
-        console.log( 'emeddings updated ' + pet._id)
+        console.log( 'emeddings updated ' + pet._id! + ":" + text)
     ).catch(error=>console.log(error));
 }
 
@@ -163,18 +157,49 @@ async function generateEmbedding(input: string):Promise<number[]> {
     return vectorEmbedding.data[0].embedding;
 }
 
+async function sumarizePetsforUser(userId: string):Promise<string> {
+    
+    const results = await PetModel.aggregate([
+            {
+            "$match": { ownerId: userId                    
+            }
+            },
+            {
+            '$group': {_id: '$kind' ,
+                    'numberofPets':  {$sum:1} }
+            }
+           ]);
+           console.log (results)
+           let text = 'home with '
+           for (let p of results) {
+                text += p.numberofPets + " " + p._id
+           }
+    return "";
+    
+}
+
 export const recommendPet: RequestHandler<unknown , StandardResponse<Pet[]>
-            ,unknown,  {kind: string, age:string , preferences:string, userid?:string}> = async (req, res, next) => {
+            ,unknown,  {kind: string, age:string , preferences:string}> = async (req, res, next) => {
 
    try { 
         let text = '' ;
         const { kind, age, preferences } = req.query;
         if (kind && age){
-            text  = text + ' I am looking for a ' + age + ' ' + kind + '.' 
+            text  = text + ' I am looking for ' +
+            (age === "Any Age" ? "":  age ==="junior" ? "young" :
+                age === "middle" ? "adult" : age) 
+            + ' ' + ( kind=="any"? "any pet": kind ); 
         } 
-        text = text + ' ' + preferences
-       // const text = 'I am looking for  a senior dog . I would like to get pretty face with white fur'
+        if (req.user.role === "PetSeeker"){
+            
+            const myStatus= await sumarizePetsforUser(req.user._id);
 
+            text  = text + myStatus 
+
+        }
+        text = text + ' ' + preferences
+       
+       console.log (' Recommending to: '+  text);
         const embeddedQuery = await generateEmbedding(text);
     
         const results = await PetModel.aggregate([
@@ -192,7 +217,9 @@ export const recommendPet: RequestHandler<unknown , StandardResponse<Pet[]>
                 description:1,sterilized:1,image_path:1}
             }
            ]);
-           console.log (results);
+           for (let p of results) {
+                console.log (p.name);
+           }
         res.status(201).json({ success: true, data: results });
 
     } catch (err) {
