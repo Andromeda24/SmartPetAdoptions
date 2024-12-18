@@ -49,12 +49,12 @@ import { environment } from '../../environments/environment.development';
         } 
        .image-container{
             overflow : hidden;      
-            width : 500px !important;
-            height : 600px !important;           
+            width : 30vw!important;
+            height : 60vh!important;           
         }
         .image-container img {
           width: 100%;
-          height: 100%;
+          height: 80%;
           object-fit: cover;
         }
         .tall-card {
