@@ -49,13 +49,21 @@ import { PetService } from './pet.service';
         <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef> Actions </th>
         <td mat-cell *matCellDef="let pet">
-        <ng-container *ngIf="isAdmin()"> 
-        <button mat-icon-button [routerLink]="['/pets/update', pet._id]">
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button mat-icon-button color="warn" (click)="deletePet(pet._id)">
-            <mat-icon>delete</mat-icon>
-          </button>
+        <ng-container *ngIf="isAdmin()">  
+
+          <mat-icon 
+          color="primary" 
+          style="cursor: pointer;" 
+          (click)="editPet(pet._id)">
+          edit
+        </mat-icon>
+
+          <mat-icon 
+          color="warn" 
+          style="cursor: pointer;" 
+          (click)="deletePet(pet._id)">
+          delete
+<         </mat-icon>
           </ng-container>
         </td>
        </ng-container>
