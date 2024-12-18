@@ -1,6 +1,6 @@
 import { Component,inject,signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { PetTestService } from './pet.service.test';
+//import { PetTestService } from './pet.service.test';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { PetService } from './pet.service';
@@ -45,17 +45,13 @@ import { environment } from '../../environments/environment.development';
         margin: 20px auto;
         padding: 20px;
         background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 -4px 8px rgba(0, 0, 0, 0.1);    
-    
-       } 
-
+        border-radius: 8px;      
+        } 
        .image-container{
             overflow : hidden;      
             width : 500px !important;
             height : 600px !important;           
         }
-
         .image-container img {
           width: 100%;
           height: 100%;
@@ -74,7 +70,7 @@ export class PetDetailComponent {
   #petService = inject(PetService);
   imageUrl :string | null = null;
  // imageUrl = environment.SERVER_URL+"/pictures" +"/"+"9fd3289207c246965f465aba77cbcd33";
-  constructor(private route: ActivatedRoute,private petService: PetTestService){ 
+  constructor(private route: ActivatedRoute){ 
 
     this.id = this.route.snapshot.paramMap.get('id');
     if (this.id) {    

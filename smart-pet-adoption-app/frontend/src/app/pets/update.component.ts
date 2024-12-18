@@ -147,9 +147,7 @@ export class UpdateComponent implements OnInit {
     'sterilized': [false, Validators.required]
   });
 
-
-  constructor(private route: ActivatedRoute) {}
-  
+  constructor(private route: ActivatedRoute) {}  
   ngOnInit() {  
       this.form.valueChanges.subscribe(() => {
         this.form_error = null;   

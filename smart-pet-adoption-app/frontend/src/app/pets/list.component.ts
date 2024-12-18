@@ -6,7 +6,7 @@ import { MatPaginator  } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort'; 
 import { MatTableModule } from '@angular/material/table';
 import { MatTableDataSource } from '@angular/material/table';
-import { PetTestService } from './pet.service.test';
+//import { PetTestService } from './pet.service.test';
 import { ViewChild } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { Pet } from './pet.type';
