@@ -146,8 +146,8 @@ export class ListComponent {
     console.log('Admin ' +this.isAdmin())
     if(this.isAdmin()){
 
-      this.#petService.get_pets(10).subscribe(response => {
-       console.log("Pet Service  all" + JSON.stringify(response.data))
+      this.#petService.get_pets().subscribe(response => { 
+        console.log("Pet Service All pets " + JSON.stringify(response.data))
         if (response.success) {
           this.pets.set(response.data);
           this.petsDataSource.data = response.data;
@@ -156,9 +156,8 @@ export class ListComponent {
     }else{
       if (this.#storedState) {
         const parsedState = JSON.parse(this.#storedState);
-        const ownerId =  parsedState._id;
-        console.log("ownerID"+ownerId)
-        this.#petService.get_pets_byowner(10,ownerId).subscribe(response => {
+        const ownerId =  parsedState._id;      
+        this.#petService.get_pets_byowner(ownerId).subscribe(response => {
         console.log("Pet Service owner " + JSON.stringify(response.data))
         if (response.success) {
           this.pets.set(response.data);

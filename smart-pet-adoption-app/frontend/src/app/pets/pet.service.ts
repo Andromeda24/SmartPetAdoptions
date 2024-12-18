@@ -16,12 +16,12 @@ export interface StandardResponse<T> {
 export class PetService {
   #http = inject(HttpClient);
 
-  get_pets(page: number = 1) {
-    return this.#http.get<StandardResponse<Pet[]>>(environment.SERVER_URL + 'pets/?page=' + page);
+  get_pets() {
+    return this.#http.get<StandardResponse<Pet[]>>(environment.SERVER_URL + 'pets');
   }
 
-  get_pets_byowner(page: number = 1,ownerId : string) {
-    return this.#http.get<StandardResponse<Pet[]>>(environment.SERVER_URL + 'pets/?page=' + page +'&=ownerId='+ownerId);
+  get_pets_byowner(ownerId : string) {  
+    return this.#http.get<StandardResponse<Pet[]>>(environment.SERVER_URL + 'pets/'+`${ownerId}`);
   }
 
   get_pet(pet_id: string) {
@@ -33,7 +33,7 @@ export class PetService {
   }
 
   put_pet(pet: Pet) {
-    console.log('Pet id put'+pet._id)
+    
     return this.#http.put<StandardResponse<number>>(environment.SERVER_URL + `pets/${pet._id}`, pet);
   }
 

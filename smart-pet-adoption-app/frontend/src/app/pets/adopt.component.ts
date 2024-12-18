@@ -78,7 +78,7 @@ export class AdoptComponent {
 
  loadPets(): void {
    if(this.isAdmin()){
-     this.#petService.get_pets(10).subscribe(response => {
+     this.#petService.get_pets().subscribe(response => {
        if (response.success) {       
         this.pets.set(response.data.filter(pet=>pet.ownerId === ''));     
        }
