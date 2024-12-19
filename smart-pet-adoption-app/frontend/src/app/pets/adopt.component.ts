@@ -40,7 +40,7 @@ import { UsersService } from '../users/users.service';
        }
 
  .adopt-container {        
-       display: grid;
+        display: grid;
         grid-template-columns: 150px 1fr;
         gap: 10px 20px;
         width: 40vw;
