@@ -39,17 +39,17 @@ import { UsersService } from '../users/users.service';
       
        }
 
-     .adopt-container {        
-       display: grid; 
-        grid-template-columns: 150px 1fr; 
+ .adopt-container {        
+       display: grid;
+        grid-template-columns: 150px 1fr;
         gap: 10px 20px;
-        width: 50%;
+        width: 40vw;
         margin: 20px auto;
         padding: 20px 30px 20px 20px;
         background-color: #fff;
         border: 1px solid #ddd;
         border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 -4px 8px rgba(0, 0, 0, 0.1);     
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 -4px 8px rgba(0, 0, 0, 0.1);    
        }
 
     `]

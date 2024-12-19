@@ -12,7 +12,6 @@ export const checkToken: RequestHandler = async (req, res, next) => {
 
         const decoded = verify(token, process.env.SECRET) as Token;
         req.user = decoded;
-        console.log( decoded);
         next();
 
     } catch (e) {
@@ -22,7 +21,6 @@ export const checkToken: RequestHandler = async (req, res, next) => {
 
 export const checkAdm: RequestHandler = async (req, res, next) => {
     try {
-        console.log(req.user.role)
         if (req.user.role === 'ShelterAdmin'){
             next();
         } else {

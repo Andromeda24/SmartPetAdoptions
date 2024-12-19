@@ -13,10 +13,25 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVjYzVkY
     "sterilized": "true"
 }
 
+### new pet with picture
+POST http://localhost:3000/pets
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVlNmMzZWRiNDMwYjQ1MmMwNzgwZWUiLCJuYW1lIjoiR3VkcnVtIiwiZW1haWwiOiJ2aXZhdG1hQHZpdmF0bWEub3JnIiwicm9sZSI6IlNoZWx0ZXJBZG1pbiIsImlhdCI6MTczNDM4MTc0NX0.iG4qSZxcKuZNPfbZW1Revtc-kDjftBs15Xf6kFbNg9s
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="profile_picture"; filename="tonya.jpg"
+Content-Type: image/jpeg
+
+< ./tonya.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+PUT http://localhost:3000/pets/675f0439e4938afa2dfdcb6b
 
 
 ### adopt pet
-PUT http://localhost:3000/pets/675ef4377fb9124b38010131
+PUT http://localhost:3000/pets/675f0439e4938afa2dfdcb6b
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVlNmMzZWRiNDMwYjQ1MmMwNzgwZWUiLCJuYW1lIjoiR3VkcnVtIiwiZW1haWwiOiJ2aXZhdG1hQHZpdmF0bWEub3JnIiwicm9sZSI6IlNoZWx0ZXJBZG1pbiIsImlhdCI6MTczNDM4MTc0NX0.iG4qSZxcKuZNPfbZW1Revtc-kDjftBs15Xf6kFbNg9s
 
@@ -28,17 +43,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVlNmMzZ
 
 
 ### update pet
-PUT http://localhost:3000/pets/picture/675e6d5a4c01e2d57706a7d2
+PUT http://localhost:3000/pets/67631201b2f002aac86e4cc5
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVlNmMzZWRiNDMwYjQ1MmMwNzgwZWUiLCJuYW1lIjoiR3VkcnVtIiwiZW1haWwiOiJ2aXZhdG1hQHZpdmF0bWEub3JnIiwicm9sZSI6IlNoZWx0ZXJBZG1pbiIsImlhdCI6MTczNDM4MTc0NX0.iG4qSZxcKuZNPfbZW1Revtc-kDjftBs15Xf6kFbNg9s
 Content-Type: application/json
 
 {
-    "name": "Tonya",
+    "name": "Tonia",
     "kind": "Dog",
     "breed": "crossbreed",
     "age": "6",
     "gender":"Female",
-    "description": "This lovely little cow is also a very good guardian.",
+    "description": "spots like a Holstein cow. active",
     "sterilized": "true"
 }
 
@@ -64,7 +79,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVjYzVkY
 Content-Type: application/json
 
 ### get  pet list by owner
-GET http://localhost:3000/pets/1/432432543254
+GET http://localhost:3000/pets/675fb70de09a04a85c8902e4
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVjYzVkYTJlNzlhY2FlNGM3YmExMDMiLCJuYW1lIjoiR3VkcnVtIiwiZW1haWwiOiJ2aXZhdG1hQHZpdmF0bWEub3JnIiwiaWF0IjoxNzM0MTkzNTgxfQ.jVC5on5FM1v3DCGFkJBld7ya-s9zrkV04mSFyThAYkA
 Content-Type: application/json
 
@@ -90,7 +105,7 @@ Content-Type: application/json
 
 
 {
-    "name": "Tonya",
+    "name": "Updated Tonya",
     "kind": "Dog",
     "breed": "crossbreed",
     "age": "6",

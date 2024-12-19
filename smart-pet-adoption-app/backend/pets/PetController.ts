@@ -12,7 +12,7 @@ export const newPet: RequestHandler<unknown, StandardResponse<Pet>
 
             if (!req.body.name) 
                 throw new ErrorWithStatus('Name is required',403);
-            let new_pet = req.body;         
+            let new_pet = {...req.body, ownerId:'-'};         
 
             if (req.file){
                 new_pet = {...new_pet, image_path:req.file.path}
@@ -110,7 +110,7 @@ export const listPets: RequestHandler<{page: number, ownerId:string} , StandardR
         if (req.params.ownerId){
             query  = {... query, ownerId: req.params.ownerId} ;
         } else {
-            query  = {... query} ; 
+          //  query  = {... query, ownerId:'-'} ; 
         } 
         if (Number(req.params.page)){
             page=Number(req.params.page)-1;
@@ -135,7 +135,8 @@ async function generatePetEmbeding(pet: Pet){
     const text = 'I am a ' +pet.age + ' years old ' +pet.gender! + ' ' + pet.breed! + ' ' +
     pet.kind + '.' + pet.description;
     
-    const embedding =  await generateEmbedding(text);
+    const embedding =   (pet.ownerId) ? await generateEmbedding(text)
+    : [];
     
     PetModel.updateOne({_id: pet._id}
         , {$set: { embeddedDescription: embedding }}
@@ -210,6 +211,9 @@ export const recommendPet: RequestHandler<unknown , StandardResponse<Pet[]>
             "numCandidates": 10,
             "limit": 3,
             "index": "vector_index",
+           // "filter": {
+           //     ownerId: { "$eq": "-" }
+           // },
             }
             },
             {

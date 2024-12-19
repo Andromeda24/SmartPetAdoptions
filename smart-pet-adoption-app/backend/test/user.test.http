@@ -18,8 +18,8 @@ POST http://localhost:3000/users/login
 Content-Type: application/json
 
 {
-    "email": "gg@miu.edu",
-    "password": "sss"
+    "email": "aa@miu.edu",
+    "password": "123"
 }
 
 ###
