@@ -121,7 +121,7 @@ export const listPets: RequestHandler<{page: number, ownerId:string} , StandardR
                     description:1,sterilized:1,image_path:1,ownerId:1})
             .skip(page*PAGE_SIZE)
             .limit(PAGE_SIZE);
-        res.status(201).json({ success: true, data: results });
+        res.status(200).json({ success: true, data: results });
 
     } catch (err) {
         next(err);
@@ -187,8 +187,8 @@ export const recommendPet: RequestHandler<unknown , StandardResponse<Pet[]>
         const { kind, age, preferences } = req.query;
         if (kind && age){
             text  = text + ' I am looking for ' +
-            (age === "Any Age" ? "":  age ==="junior" ? "young" :
-                age === "middle" ? "adult" : age) 
+            (age === "Any Age" ? "":  age ==="junior" ? "new born" :
+                age === "Middle" ? "adult" : age) 
             + ' ' + ( kind=="any"? "any pet": kind ); 
         } 
         if (req.user.role === "PetSeeker"){
@@ -208,7 +208,7 @@ export const recommendPet: RequestHandler<unknown , StandardResponse<Pet[]>
             "$vectorSearch": {
                     "queryVector": embeddedQuery,
             "path": "embeddedDescription",
-            "numCandidates": 10,
+            "numCandidates": 20,
             "limit": 3,
             "index": "vector_index",
            // "filter": {
@@ -224,7 +224,7 @@ export const recommendPet: RequestHandler<unknown , StandardResponse<Pet[]>
            for (let p of results) {
                 console.log (p.name);
            }
-        res.status(201).json({ success: true, data: results });
+        res.status(200).json({ success: true, data: results });
 
     } catch (err) {
         next(err);
