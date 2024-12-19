@@ -12,7 +12,7 @@ export const newPet: RequestHandler<unknown, StandardResponse<Pet>
 
             if (!req.body.name) 
                 throw new ErrorWithStatus('Name is required',403);
-            let new_pet = {...req.body, ownerId:'-'};         
+            let new_pet = {...req.body, ownerId:''};         
 
             if (req.file){
                 new_pet = {...new_pet, image_path:req.file.path}
@@ -67,6 +67,7 @@ export const updatePet: RequestHandler<{petid:string}, StandardResponse<Pet>
                 description: results.description,
                 sterilized: results.sterilized,
                 image_path: results.image_path,
+                ownerId: results.ownerId
             };
             generatePetEmbeding(pet);
             return res.status(200).json({success: true, 
@@ -110,7 +111,7 @@ export const listPets: RequestHandler<{page: number, ownerId:string} , StandardR
         if (req.params.ownerId){
             query  = {... query, ownerId: req.params.ownerId} ;
         } else {
-          //  query  = {... query, ownerId:'-'} ; 
+            query  = {... query, ownerId:''} ; 
         } 
         if (Number(req.params.page)){
             page=Number(req.params.page)-1;
@@ -120,7 +121,8 @@ export const listPets: RequestHandler<{page: number, ownerId:string} , StandardR
                 ,{_id: 1, name:1,kind:1,breed:1,age:1,gender:1,
                     description:1,sterilized:1,image_path:1,ownerId:1})
             .skip(page*PAGE_SIZE)
-            .limit(PAGE_SIZE);
+            .limit(PAGE_SIZE)
+            .sort({name:1});
         res.status(200).json({ success: true, data: results });
 
     } catch (err) {
@@ -134,9 +136,14 @@ export const listPets: RequestHandler<{page: number, ownerId:string} , StandardR
 async function generatePetEmbeding(pet: Pet){
     const text = 'I am a ' +pet.age + ' years old ' +pet.gender! + ' ' + pet.breed! + ' ' +
     pet.kind + '.' + pet.description;
+    console.log (pet.ownerId);
+    let embedding: number[] = [];
+    if (pet.ownerId===""){
+        console.log ('updating vector');
+        embedding = await generateEmbedding(text)
+    }
     
-    const embedding =   (pet.ownerId) ? await generateEmbedding(text)
-    : [];
+    
     
     PetModel.updateOne({_id: pet._id}
         , {$set: { embeddedDescription: embedding }}
@@ -187,7 +194,7 @@ export const recommendPet: RequestHandler<unknown , StandardResponse<Pet[]>
         const { kind, age, preferences } = req.query;
         if (kind && age){
             text  = text + ' I am looking for ' +
-            (age === "Any Age" ? "":  age ==="junior" ? "new born" :
+            (age === "Any Age" ? "":  age ==="Junior" ? "new born" :
                 age === "Middle" ? "adult" : age) 
             + ' ' + ( kind=="any"? "any pet": kind ); 
         } 
