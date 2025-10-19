@@ -6,6 +6,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    // required for serialization
+    //kotlin("plugin.serialization") version "2.2.20"
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.2.20"
 }
 
 android {
@@ -40,11 +43,11 @@ android {
 //    }
 
     // required after updating the kotlin version
-    kotlin {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_21)
-        }
-    }
+//    kotlin {
+//        compilerOptions {
+//            jvmTarget.set(JvmTarget.JVM_21)
+//        }
+//    }
 
     buildFeatures {
         compose = true
@@ -57,6 +60,11 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended-android:1.7.8")
     // to use Jetpack viewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.4")
+// to use Jetpack Navigation
+    implementation("androidx.navigation3:navigation3-runtime:1.0.0-alpha11")
+    implementation("androidx.navigation3:navigation3-ui:1.0.0-alpha11")
+    // serialization
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.9.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

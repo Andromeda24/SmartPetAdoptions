@@ -17,7 +17,7 @@ class SignInUpViewModel(
     init {
         // checkToken()
     }
-    fun login(username: String, password: String){
+    fun login(username: String, password: String): Boolean{
         // 1. validate username end set the message in the field usernameMessage in state
         if (username.isEmpty()){
             _loginUiState.update {
@@ -40,7 +40,7 @@ class SignInUpViewModel(
         }
 
         if (username.isEmpty() || password.isEmpty()){
-            return
+            return false
         }
     // 3. call the SignInRemoteRepository to authenticate in the server
 
@@ -51,7 +51,7 @@ class SignInUpViewModel(
             usernameError = null,
             lastError = "User Authenticated")
         }
-
+        return true
     }
     fun clean(){
         _loginUiState.update {

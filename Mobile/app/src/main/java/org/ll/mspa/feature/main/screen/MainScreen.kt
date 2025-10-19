@@ -24,22 +24,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
+import androidx.compose.material.icons.filled.Animation
+import androidx.compose.material.icons.filled.CrueltyFree
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Pets
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.ui.graphics.vector.ImageVector
+import org.ll.mspa.nav.BottomNavItem
+import org.ll.mspa.nav.MspaNavKey
 
 // Data class to hold information for each navigation item
-data class BottomNavItem(val label: String, val icon: ImageVector)
+
 @Composable
-fun MainScreen() {
-    // List of items for the bottom navigation bar
-    val navItems = listOf(
-        BottomNavItem("Home", Icons.Default.Home),
-        BottomNavItem("Pets", Icons.Default.Pets),
-    )
+fun MainScreen(
+    navItems: List<BottomNavItem>
+    )  {
+
 
     // State to keep track of the selected item index
     var selectedItemIndex by remember { mutableIntStateOf(0) }
@@ -58,6 +60,7 @@ fun MainScreen() {
                         onClick = {
                             selectedItemIndex = index
                             // You can add navigation logic here
+                            item.action(item.key)
                         },
                         label = { Text(item.label) },
                         icon = {
@@ -78,7 +81,9 @@ fun MainScreen() {
             ) {
                 // Login Button
                 FloatingActionButton(
-                    onClick = { /* TODO: Handle Add action */ },
+                    onClick = {
+
+                         },
                 ) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally
@@ -94,21 +99,21 @@ fun MainScreen() {
 
                 // Edit profile
                 // Button
-                FloatingActionButton(
-                    onClick = { /* TODO: Handle Edit action */ },
-
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ){
-                        Icon(
-                            imageVector = Icons.Default.Edit,
-                            contentDescription = "Edit Profile",
-                        )
-                        Text ("Edit Profile")
-                    }
-
-                }
+//                FloatingActionButton(
+//                    onClick = { /* TODO: Handle Edit action */ },
+//
+//                ) {
+//                    Column(
+//                        horizontalAlignment = Alignment.CenterHorizontally
+//                    ){
+//                        Icon(
+//                            imageVector = Icons.Default.Edit,
+//                            contentDescription = "Edit Profile",
+//                        )
+//                        Text ("Edit Profile")
+//                    }
+//
+//                }
             }
         }
     ) { innerPadding ->
@@ -123,14 +128,15 @@ fun MainScreen() {
                 text = "Welcome Julia. Smart Pet Adoption is an app that uses AI help people to find their ideal pet.\n" ,
                 textAlign = TextAlign.Justify,
                 style = MaterialTheme.typography.bodyMedium,
-
+                modifier = Modifier.align(Alignment.TopCenter) // Center the content
             )
             Text(
                 text = "Your favorite animals are waiting to be adopted:.\n" ,
                 textAlign = TextAlign.Justify,
                 style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.align(Alignment.BottomCenter) // Center the content
+            )
 
-                )
         }
     }
 }
@@ -142,5 +148,5 @@ fun MainScreenPreview() {
     // It's good practice to wrap previews in your app's theme
     // Replace YourAppTheme with the actual name of your theme
 
-        MainScreen()
+  //      MainScreen()
 }
