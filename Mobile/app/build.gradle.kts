@@ -54,8 +54,9 @@ android {
 dependencies {
 // required for using icons
     //implementation("androidx.compose.material:material-icons-extended-android:1.6.7") // Or use the version catalog alias
-    implementation("androidx.compose.material:material-icons-extended-android:1.6.7")
-
+    implementation("androidx.compose.material:material-icons-extended-android:1.7.8")
+    // to use Jetpack viewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.4")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

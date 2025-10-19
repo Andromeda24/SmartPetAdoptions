@@ -125,6 +125,12 @@ fun MainScreen() {
                 style = MaterialTheme.typography.bodyMedium,
 
             )
+            Text(
+                text = "Your favorite animals are waiting to be adopted:.\n" ,
+                textAlign = TextAlign.Justify,
+                style = MaterialTheme.typography.bodyMedium,
+
+                )
         }
     }
 }

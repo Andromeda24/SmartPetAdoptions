@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import org.ll.mspa.feature.main.screen.MainScreen
+import org.ll.mspa.feature.main.screen.SignInUpScreen
 import org.ll.mspa.ui.theme.MspaTheme
 
 class MainActivity : ComponentActivity() {
@@ -23,7 +24,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MspaTheme {
-                MainScreen() // Call your main screen composable
+                SignInUpScreen() // Call your main screen composable
             }
         }
     }
