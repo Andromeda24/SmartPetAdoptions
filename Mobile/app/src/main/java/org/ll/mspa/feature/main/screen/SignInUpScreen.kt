@@ -31,11 +31,13 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.ll.mspa.feature.main.viewmodel.SignInUpViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import org.ll.mspa.data.authentication.entity.UserInfo
+import org.ll.mspa.service.LocalAuthenticationRepositoryImpl
 
 // Data class to hold information for each navigation item
 
 @Composable
-fun SignInUpScreen(modifier: Modifier, onLogin: () -> Boolean) {
+fun SignInUpScreen(modifier: Modifier, onLogin: (user: UserInfo) -> Boolean) {
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -47,106 +49,115 @@ fun SignInUpScreen(modifier: Modifier, onLogin: () -> Boolean) {
         var password by remember { mutableStateOf (value = "") }
 
         val signInUpViewModel: SignInUpViewModel = viewModel {
-            SignInUpViewModel()
+            SignInUpViewModel(LocalAuthenticationRepositoryImpl())
         }
         val currentState by signInUpViewModel.loginUIState.collectAsStateWithLifecycle()
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding).padding(horizontal =20.dp, vertical = 100.dp), // Apply padding provided by the Scaffold
-            horizontalAlignment = Alignment.Start // Center the content
-        ) {
-            Text(
-                text = "Smart Pet Adoption uses AI help people to find their ideal pet.\n" +
-                        "To continue, please Log-in",
-                textAlign = TextAlign.Justify,
-                style = MaterialTheme.typography.bodyMedium,
+        if (currentState.isAuthenticated && currentState.currentUser != null){
+            onLogin(currentState.currentUser!!)
+        } else {
 
-            )
-
-
-            OutlinedTextField(
-                value=username,
-                onValueChange = {
-                        data -> username = data
-                },
-                label = { Text(text="username")},
-                keyboardOptions = KeyboardOptions (keyboardType =KeyboardType.Email),
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(all = 10.dp) , // shaping the keyboard into the screen
-                isError = currentState.usernameError != null,
-                supportingText = {
-                    if (currentState.usernameError != null) {
-                        Text(text =currentState.usernameError?:"")
-                    }
-                }
-            )
+                    .fillMaxSize()
+                    .padding(innerPadding).padding(horizontal =20.dp, vertical = 100.dp), // Apply padding provided by the Scaffold
+                horizontalAlignment = Alignment.Start // Center the content
+            ) {
+                Text(
+                    text = "Smart Pet Adoption uses AI help people to find their ideal pet.\n" +
+                            "To continue, please Log-in",
+                    textAlign = TextAlign.Justify,
+                    style = MaterialTheme.typography.bodyMedium,
+
+                    )
 
 
-
-            OutlinedTextField(
-                value=password,
-                onValueChange = {
-                    //data -> password = data
-                    password = it // other way to write the function
-                },
-                label = { Text(text="Password")},
-                keyboardOptions = KeyboardOptions (keyboardType = KeyboardType.NumberPassword),
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(all = 10.dp),  // shaping the keyboard into the screen
-                isError = currentState.passwordError != null,
-                supportingText = {
-                    if (currentState.passwordError != null) {
-                        Text(text =currentState.passwordError?:"")
-                    }
-                }
-            )
-            Row (
-                horizontalArrangement = Arrangement.Absolute.SpaceEvenly,
-                modifier = Modifier.fillMaxWidth()
-
-            ){
-
-                // future research : with custom views, you can customize the button
-                Button(
-                    onClick = {
-                        username = ""
-                        password = ""
-                        signInUpViewModel.clean()
+                OutlinedTextField(
+                    value=username,
+                    onValueChange = {
+                            data -> username = data
                     },
-                    Modifier.padding(all = 10.dp)
+                    label = { Text(text="username")},
+                    keyboardOptions = KeyboardOptions (keyboardType =KeyboardType.Email),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(all = 10.dp) , // shaping the keyboard into the screen
+                    isError = currentState.usernameError != null,
+                    supportingText = {
+                        if (currentState.usernameError != null) {
+                            Text(text =currentState.usernameError?:"")
+                        }
+                    }
+                )
 
-                    ) {
-                    Text ( text = "Clear")
-                }
 
-                Button(
 
-                    onClick = {
+                OutlinedTextField(
+                    value=password,
+                    onValueChange = {
+                        //data -> password = data
+                        password = it // other way to write the function
+                    },
+                    label = { Text(text="Password")},
+                    keyboardOptions = KeyboardOptions (keyboardType = KeyboardType.NumberPassword),
+                    visualTransformation = PasswordVisualTransformation(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(all = 10.dp),  // shaping the keyboard into the screen
+                    isError = currentState.passwordError != null,
+                    supportingText = {
+                        if (currentState.passwordError != null) {
+                            Text(text =currentState.passwordError?:"")
+                        }
+                    }
+                )
+                Row (
+                    horizontalArrangement = Arrangement.Absolute.SpaceEvenly,
+                    modifier = Modifier.fillMaxWidth()
 
-                        if (signInUpViewModel.login(username,password)){
-                            val toast = Toast.makeText(
-                                context,
-                                "User Authenticated",
-                                Toast.LENGTH_LONG
-                            )
+                ){
 
-                            toast.show()
+                    // future research : with custom views, you can customize the button
+                    Button(
+                        onClick = {
                             username = ""
                             password = ""
                             signInUpViewModel.clean()
-                            onLogin()
-                            // redirect to main screen
-
-                        }
-                    },Modifier.padding(all = 10.dp),
+                        },
+                        Modifier.padding(all = 10.dp)
 
                     ) {
-                    Text ( text = "Submit")
+                        Text ( text = "Clear")
+                    }
+
+                    Button(
+
+                        onClick = {
+
+                            if (signInUpViewModel.login(username,password)){
+                                val toast = Toast.makeText(
+                                    context,
+                                    "User Authenticated",
+                                    Toast.LENGTH_SHORT
+                                )
+
+                                toast.show()
+                                username = ""
+                                password = ""
+                                // redirect to main screen
+                                if (currentState.isAuthenticated && currentState.currentUser != null){
+                                    onLogin(currentState.currentUser!!)
+                                }
+                                signInUpViewModel.clean()
+
+
+
+                            }
+                        },Modifier.padding(all = 10.dp),
+
+                        ) {
+                        Text ( text = "Submit")
+                    }
                 }
             }
         }

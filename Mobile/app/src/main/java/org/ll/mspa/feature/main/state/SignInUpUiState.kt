@@ -1,6 +1,7 @@
 package org.ll.mspa.feature.main.state
 
-import org.ll.mspa.data.UserInfo
+import org.ll.mspa.data.authentication.entity.UserInfo
+
 
 data class SignInUpUiState(
     val isAuthenticated: Boolean = false,

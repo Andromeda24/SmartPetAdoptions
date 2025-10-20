@@ -32,6 +32,7 @@ import androidx.compose.material.icons.filled.Pets
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.ui.graphics.vector.ImageVector
+import org.ll.mspa.data.authentication.entity.UserInfo
 import org.ll.mspa.nav.BottomNavItem
 import org.ll.mspa.nav.MspaNavKey
 
@@ -39,13 +40,14 @@ import org.ll.mspa.nav.MspaNavKey
 
 @Composable
 fun MainScreen(
-    navItems: List<BottomNavItem>
+    navItems: List<BottomNavItem>,
+    user: UserInfo
     )  {
 
 
     // State to keep track of the selected item index
-    var selectedItemIndex by remember { mutableIntStateOf(0) }
 
+    val mykey = "Main"
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -56,11 +58,9 @@ fun MainScreen(
             ) {
                 navItems.forEachIndexed { index, item ->
                     NavigationBarItem(
-                        selected = selectedItemIndex == index,
+                        selected = item.key == mykey,
                         onClick = {
-                            selectedItemIndex = index
-                            // You can add navigation logic here
-                            item.action(item.key)
+                            item.action(item.key,user)
                         },
                         label = { Text(item.label) },
                         icon = {
@@ -125,7 +125,7 @@ fun MainScreen(
             contentAlignment = Alignment.TopCenter // Center the content
         ) {
             Text(
-                text = "Welcome Julia. Smart Pet Adoption is an app that uses AI help people to find their ideal pet.\n" ,
+                text = "Welcome ${user.firstname} Smart Pet Adoption is an app that uses AI help people to find their ideal pet.\n" ,
                 textAlign = TextAlign.Justify,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.align(Alignment.TopCenter) // Center the content

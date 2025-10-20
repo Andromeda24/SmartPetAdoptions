@@ -2,6 +2,7 @@ package org.ll.mspa.nav
 
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
+import org.ll.mspa.data.authentication.entity.UserInfo
 
 
 @Serializable
@@ -9,15 +10,20 @@ sealed interface MspaNavKey: NavKey{
     @Serializable
     data object SignIn: MspaNavKey
     @Serializable
+    data class Main(val user: UserInfo): MspaNavKey
 
-    data object Main: MspaNavKey
+    @Serializable
+    data object ExistingMain: MspaNavKey
+
     @Serializable
 
-    data object PetExplorer: MspaNavKey
+    data class PetExplorer(val user: UserInfo): MspaNavKey
     @Serializable
 
-    data object VirtualPet: MspaNavKey
+    data class VirtualPet(val user: UserInfo): MspaNavKey
     @Serializable
 
     data object PetDetail: MspaNavKey
+
+
 }

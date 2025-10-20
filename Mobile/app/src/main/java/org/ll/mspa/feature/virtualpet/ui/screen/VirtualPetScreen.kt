@@ -14,10 +14,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import org.ll.mspa.data.authentication.entity.UserInfo
 import org.ll.mspa.nav.BottomNavItem
+import org.ll.mspa.nav.MspaNavKey
 
 @Composable
-fun VirtualPetScreen(navItems: List<BottomNavItem>, modifier: Modifier = Modifier) {
+fun VirtualPetScreen(navItems: List<BottomNavItem>,
+                     user: UserInfo,
+                     modifier: Modifier = Modifier) {
+
+    val mykey = "VirtualPet"
     Scaffold (
         bottomBar = {
             BottomAppBar(
@@ -26,11 +32,9 @@ fun VirtualPetScreen(navItems: List<BottomNavItem>, modifier: Modifier = Modifie
             ) {
                 navItems.forEachIndexed { index, item ->
                     NavigationBarItem(
-                        selected = false,
+                        selected = item.key == mykey,
                         onClick = {
-                           // selectedItemIndex = index
-                            // You can add navigation logic here
-                            item.action(item.key)
+                            item.action(item.key,user)
                         },
                         label = { Text(item.label) },
                         icon = {
