@@ -1,24 +1,33 @@
 package org.ll.mspa.data.service
 
+import kotlinx.coroutines.flow.Flow
 import org.ll.mspa.data.authentication.entity.UserInfo
-import org.ll.mspa.data.authentication.repository.LocalAuthenticationRepository
+import org.ll.mspa.data.local.LocalAuthenticationRepository
 
-class FakeLocalAuthenticationRepositoryImpl (
+class FakeLocalAuthenticationRepositoryImpl () //: LocalAuthenticationRepository
+ {
 
-): LocalAuthenticationRepository {
-    private var currentUser: UserInfo? = null
+    private var currentUser: UserInfo? = UserInfo(
+        "pedro",
+        "perez",
+        "pp@mal.com",
+        "123"
+    )
 
-    override fun retrieveAuthenticatedUser(): UserInfo? {
+    //override
+    fun retrieveAuthenticatedUser(): UserInfo? {
         //TODO("Not yet implemented")
         return currentUser
     }
 
-    override fun saveAuthenticatedUser(user: UserInfo) {
+    //override
+    fun saveAuthenticatedUser(user: UserInfo) {
         //TODO("Not yet implemented")
         currentUser = user
     }
 
-    override fun deleteAuthenticatedUser() {
+   // override
+    suspend fun deleteAuthenticatedUser() {
         //TODO("Not yet implemented")
         currentUser = null
     }

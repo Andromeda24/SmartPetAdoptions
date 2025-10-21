@@ -96,24 +96,6 @@ fun MainScreen(
                     }
 
                 }
-
-                // Edit profile
-                // Button
-//                FloatingActionButton(
-//                    onClick = { /* TODO: Handle Edit action */ },
-//
-//                ) {
-//                    Column(
-//                        horizontalAlignment = Alignment.CenterHorizontally
-//                    ){
-//                        Icon(
-//                            imageVector = Icons.Default.Edit,
-//                            contentDescription = "Edit Profile",
-//                        )
-//                        Text ("Edit Profile")
-//                    }
-//
-//                }
             }
         }
     ) { innerPadding ->
@@ -148,5 +130,5 @@ fun MainScreenPreview() {
     // It's good practice to wrap previews in your app's theme
     // Replace YourAppTheme with the actual name of your theme
 
-  //      MainScreen()
+//        MainScreen()
 }

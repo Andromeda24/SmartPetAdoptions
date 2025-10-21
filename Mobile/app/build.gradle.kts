@@ -65,7 +65,8 @@ dependencies {
     implementation("androidx.navigation3:navigation3-ui:1.0.0-alpha11")
     // serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.9.0")
-
+// data storage
+    implementation("androidx.datastore:datastore-preferences:1.1.7")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -75,6 +76,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.datastore.core)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -32,6 +32,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.ll.mspa.feature.main.viewmodel.SignInUpViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.ll.mspa.data.authentication.entity.UserInfo
+import org.ll.mspa.data.local.PreferencesDataSource
 import org.ll.mspa.service.LocalAuthenticationRepositoryImpl
 
 // Data class to hold information for each navigation item
@@ -49,13 +50,15 @@ fun SignInUpScreen(modifier: Modifier, onLogin: (user: UserInfo) -> Boolean) {
         var password by remember { mutableStateOf (value = "") }
 
         val signInUpViewModel: SignInUpViewModel = viewModel {
-            SignInUpViewModel(LocalAuthenticationRepositoryImpl())
+            SignInUpViewModel(LocalAuthenticationRepositoryImpl(
+                PreferencesDataSource(context)
+            ))
         }
         val currentState by signInUpViewModel.loginUIState.collectAsStateWithLifecycle()
 
         if (currentState.isAuthenticated && currentState.currentUser != null){
             onLogin(currentState.currentUser!!)
-        } else {
+        }
 
             Column(
                 modifier = Modifier
@@ -134,24 +137,20 @@ fun SignInUpScreen(modifier: Modifier, onLogin: (user: UserInfo) -> Boolean) {
 
                         onClick = {
 
-                            if (signInUpViewModel.login(username,password)){
+                            signInUpViewModel.login(username,password)
+                            if (currentState.isAuthenticated && currentState.currentUser != null){
                                 val toast = Toast.makeText(
                                     context,
-                                    "User Authenticated",
+                                    "User ${currentState.currentUser?.firstname} Authenticated",
                                     Toast.LENGTH_SHORT
                                 )
-
                                 toast.show()
+                                // redirect to main screen
+                                    onLogin(currentState.currentUser!!)
+
                                 username = ""
                                 password = ""
-                                // redirect to main screen
-                                if (currentState.isAuthenticated && currentState.currentUser != null){
-                                    onLogin(currentState.currentUser!!)
-                                }
                                 signInUpViewModel.clean()
-
-
-
                             }
                         },Modifier.padding(all = 10.dp),
 
@@ -159,7 +158,7 @@ fun SignInUpScreen(modifier: Modifier, onLogin: (user: UserInfo) -> Boolean) {
                         Text ( text = "Submit")
                     }
                 }
-            }
+
         }
     }
 }
